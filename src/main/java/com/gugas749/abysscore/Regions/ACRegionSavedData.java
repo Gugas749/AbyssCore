@@ -61,6 +61,15 @@ public class ACRegionSavedData extends SavedData {
         return true;
     }
 
+    public boolean removeRegion(String name) {
+        if (regions.remove(name) == null) {
+            return false;
+        }
+
+        setDirty();
+        return true;
+    }
+
     public boolean isProtected(String dimension, BlockPos pos) {
         for (ACRegion region : regions.values()) {
             if (region.contains(dimension, pos)) {

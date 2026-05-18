@@ -1,6 +1,7 @@
 package com.gugas749.abysscore.Commands;
 
 import com.gugas749.abysscore.Abysscore;
+import com.gugas749.abysscore.Regions.ACRegion;
 import com.gugas749.abysscore.Regions.ACRegionSavedData;
 import com.gugas749.abysscore.Regions.ACWorldEditSelection;
 import com.mojang.brigadier.CommandDispatcher;
@@ -24,6 +25,14 @@ public class ACRegionCommands {
                         .requires(source -> source.hasPermission(2))
 
                         .then(Commands.literal("region")
+                                .then(Commands.literal("list")
+                                        .executes(ACRegionCommands::executeList)
+                                )
+                                .then(Commands.literal("remove")
+                                        .then(Commands.argument("name", StringArgumentType.word())
+                                                .executes(ACRegionCommands::executeRemove)
+                                        )
+                                )
                                 .then(Commands.literal("add")
                                         .then(Commands.argument("name", StringArgumentType.word())
                                                 .executes(ACRegionCommands::executeAddFromWorldEdit)
@@ -37,7 +46,7 @@ public class ACRegionCommands {
                         )
         );
 
-        Abysscore.LOGGER.info("[AbyssCore] Registered: /abysscore region add <name> [<from> <to>]");
+        Abysscore.LOGGER.info("[AbyssCore] Registered: /abysscore region <add|list|remove>");
     }
 
     private static int executeAddFromWorldEdit(CommandContext<CommandSourceStack> ctx) {
@@ -79,6 +88,57 @@ public class ACRegionCommands {
         BlockPos from = BlockPosArgument.getBlockPos(ctx, "from");
         BlockPos to = BlockPosArgument.getBlockPos(ctx, "to");
         return addRegion(source, name, from, to);
+    }
+
+    private static int executeList(CommandContext<CommandSourceStack> ctx) {
+        CommandSourceStack source = ctx.getSource();
+        ACRegionSavedData data = ACRegionSavedData.get(source.getLevel());
+
+        if (data.regions().isEmpty()) {
+            source.sendSuccess(
+                    () -> Component.translatable("message.abysscore.region.list_empty"),
+                    false
+            );
+            return 0;
+        }
+
+        source.sendSuccess(
+                () -> Component.translatable("message.abysscore.region.list_header", data.regions().size()),
+                false
+        );
+
+        for (ACRegion region : data.regions()) {
+            source.sendSuccess(
+                    () -> Component.translatable(
+                            "message.abysscore.region.list_entry",
+                            region.name(),
+                            region.dimension(),
+                            region.minX(), region.minY(), region.minZ(),
+                            region.maxX(), region.maxY(), region.maxZ()
+                    ),
+                    false
+            );
+        }
+
+        return data.regions().size();
+    }
+
+    private static int executeRemove(CommandContext<CommandSourceStack> ctx) {
+        CommandSourceStack source = ctx.getSource();
+        String name = StringArgumentType.getString(ctx, "name");
+        boolean removed = ACRegionSavedData.get(source.getLevel()).removeRegion(name);
+
+        if (!removed) {
+            source.sendFailure(Component.translatable("message.abysscore.region.not_found", name));
+            return 0;
+        }
+
+        source.sendSuccess(
+                () -> Component.translatable("message.abysscore.region.removed", name),
+                true
+        );
+
+        return 1;
     }
 
     private static int addRegion(CommandSourceStack source, String name, BlockPos from, BlockPos to) {
