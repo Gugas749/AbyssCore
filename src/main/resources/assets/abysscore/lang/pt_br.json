@@ -1,0 +1,29 @@
+{
+  "_comment": "=== AbyssCore Lang File ===",
+
+  "_comment_protection": "--- Block Protection ---",
+  "message.abysscore.no_build_blocked": "§a[AbyssCore] §7Um estranho poder te impediu de construir aqui.",
+
+  "_comment_protect_cmd": "--- /abysscore protect command ---",
+  "message.abysscore.protect.already_restricted": "[AbyssCore] %s já possui a restrição de construção.",
+  "message.abysscore.protect.added_op": "[AbyssCore] Restrição de construção adicionada para %s.",
+  "message.abysscore.protect.added_player": "[AbyssCore] Você foi restrito de construir por um operador.",
+  "message.abysscore.protect.not_restricted": "[AbyssCore] %s não possui a restrição de construção.",
+  "message.abysscore.protect.removed_op": "[AbyssCore] Restrição de construção removida para %s.",
+  "message.abysscore.protect.removed_player": "[AbyssCore] Sua restrição de construção foi removida.",
+  "message.abysscore.protect.status_restricted": "[AbyssCore] %s está restrito de construir.",
+  "message.abysscore.protect.status_free": "[AbyssCore] %s não está restrito de construir.",
+  "message.abysscore.protect.player_not_found": "[AbyssCore] Não foi possível encontrar o(s) jogador(es) especificado(s).",
+
+  "_comment_region_cmd": "--- /abysscore region command ---",
+  "message.abysscore.region.already_exists": "[AbyssCore] A regiao '%s' ja existe.",
+  "message.abysscore.region.added": "[AbyssCore] Regiao '%s' adicionada em %s de %s %s %s ate %s %s %s.",
+  "message.abysscore.region.player_required": "[AbyssCore] Apenas jogadores podem criar uma regiao pela selecao do WorldEdit.",
+  "message.abysscore.region.worldedit_missing": "[AbyssCore] WorldEdit nao esta instalado. Use /abysscore region add <name> <from> <to>.",
+  "message.abysscore.region.worldedit_incomplete": "[AbyssCore] Sua selecao do WorldEdit esta incompleta.",
+  "message.abysscore.region.worldedit_error": "[AbyssCore] Nao foi possivel ler sua selecao do WorldEdit.",
+
+  "_comment_figura": "--- /abysscore figura reloadall ---",
+  "message.abysscore.figura.no_players": "[AbyssCore] Nenhum jogador online.",
+  "message.abysscore.figura.reloaded": "[AbyssCore] Figuras de avatar do Figura recarregadas para %s/%s jogador(es)."
+}

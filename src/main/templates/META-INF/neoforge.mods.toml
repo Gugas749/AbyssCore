@@ -1,0 +1,41 @@
+modLoader = "javafml" #mandatory
+loaderVersion = "${loader_version_range}" #mandatory
+issueTrackerURL = "https://github.com/Gugas749/Sanguis-Falx/issues"
+license = "${mod_license}"
+
+[[mods]] #mandatory
+modId = "${mod_id}" #mandatory
+version = "${mod_version}" #mandatory
+displayName = "${mod_name}" #mandatory
+authors = "${mod_authors}" #optional
+description = '''${mod_description}'''
+
+[[dependencies."${mod_id}"]] #optional
+modId = "neoforge" #mandatory
+type = "required" #mandatory
+versionRange = "${neo_version_range}" #mandatory
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies."${mod_id}"]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft_version_range}"
+ordering = "NONE"
+side = "BOTH"
+
+# Figura is a soft dependency — mod still loads without it,
+# but /figura reloadall will log a warning if Figura isn't present.
+[[dependencies."${mod_id}"]]
+modId = "figura"
+type = "optional"
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies."${mod_id}"]]
+modId = "worldedit"
+type = "optional"
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"
