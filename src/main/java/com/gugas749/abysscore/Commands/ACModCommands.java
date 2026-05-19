@@ -13,5 +13,6 @@ public class ACModCommands {
         ACFiguraCommands.register(event.getDispatcher());
         ACTagFlagCommands.register(event.getDispatcher());
         ACRegionCommands.register(event.getDispatcher());
+        ACBulkCommands.register(event.getDispatcher());
     }
 }
