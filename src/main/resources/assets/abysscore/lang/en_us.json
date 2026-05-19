@@ -59,8 +59,8 @@
   "screen.abysscore.bulk.perm_label": "Permission",
   "screen.abysscore.bulk.perm_everyone": "Everyone",
   "screen.abysscore.bulk.perm_op": "OP Only",
-  "screen.abysscore.bulk.commands_label": "Commands (separate with |)",
-  "screen.abysscore.bulk.commands_hint": "e.g. effect give user minecraft:speed 10 10 | effect give user minecraft:night_vision 10 10",
-  "screen.abysscore.bulk.commands_info": "Separate multiple commands with  |",
-  "screen.abysscore.bulk.save": "Save"
+  "screen.abysscore.bulk.command_hint": "e.g. effect give user minecraft:speed 10 10",
+  "screen.abysscore.bulk.max_commands": "Max 10 commands reached",
+  "screen.abysscore.bulk.save": "Save",
+  "screen.abysscore.bulk.add_row": "Add Command"
 }
