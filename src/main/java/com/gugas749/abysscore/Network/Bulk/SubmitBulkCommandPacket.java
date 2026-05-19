@@ -1,4 +1,4 @@
-package com.gugas749.abysscore.Network;
+package com.gugas749.abysscore.Network.Bulk;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;

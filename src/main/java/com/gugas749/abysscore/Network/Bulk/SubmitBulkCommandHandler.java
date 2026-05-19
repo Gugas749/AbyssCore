@@ -1,4 +1,4 @@
-package com.gugas749.abysscore.Network;
+package com.gugas749.abysscore.Network.Bulk;
 
 import com.gugas749.abysscore.Abysscore;
 import com.gugas749.abysscore.Bulk.BulkCommandData;

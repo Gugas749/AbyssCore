@@ -62,4 +62,23 @@
   "screen.abysscore.bulk.max_commands": "Máximo de 10 comandos atingido",
   "screen.abysscore.bulk.save": "Salvar",
   "screen.abysscore.bulk.add_row": "Adicionar Comando",
+
+  "_comment_key_binds": "--- Atalhos de tecla ---",
+  "message.abysscore.bind.list_header": "[AbyssCore] Lista de atalhos:",
+  "message.abysscore.bind.already_empty": "[AbyssCore] O atalho '%s' já está vazio.",
+  "message.abysscore.bind.cleared": "[AbyssCore] Atalho '%s' limpo.",
+  "message.abysscore.bind.empty_value": "Vazio",
+  "message.abysscore.bind.set_bulk": "[AbyssCore] Atalho '%s' definido para o comando em massa '%s'.",
+  "message.abysscore.bind.set_raw": "[AbyssCore] Atalho '%s' definido para o comando bruto '%s'.",
+  "message.abysscore.bind.exec_failed": "[AbyssCore] O comando vinculado falhou: %s",
+  "key.categories.abysscore": "AbyssCore",
+  "key.abysscore.bind_1": "Atalho 1",
+  "key.abysscore.bind_2": "Atalho 2",
+  "key.abysscore.bind_3": "Atalho 3",
+  "key.abysscore.bind_4": "Atalho 4",
+  "key.abysscore.bind_5": "Atalho 5",
+  "key.abysscore.bind_6": "Atalho 6",
+  "key.abysscore.bind_7": "Atalho 7",
+  "key.abysscore.bind_8": "Atalho 8",
+  "key.abysscore.bind_9": "Atalho 9"
 }

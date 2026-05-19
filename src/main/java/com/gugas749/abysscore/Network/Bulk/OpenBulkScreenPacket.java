@@ -1,7 +1,6 @@
-package com.gugas749.abysscore.Network;
+package com.gugas749.abysscore.Network.Bulk;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;

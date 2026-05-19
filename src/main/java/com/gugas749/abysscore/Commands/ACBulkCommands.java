@@ -3,7 +3,7 @@ package com.gugas749.abysscore.Commands;
 import com.gugas749.abysscore.Abysscore;
 import com.gugas749.abysscore.Bulk.BulkCommandData;
 import com.gugas749.abysscore.Bulk.BulkCommandManager;
-import com.gugas749.abysscore.Network.OpenBulkScreenPacket;
+import com.gugas749.abysscore.Network.Bulk.OpenBulkScreenPacket;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;

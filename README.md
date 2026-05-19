@@ -2,13 +2,13 @@
 
 Core utility mod for modpacks.
 
-AbyssCore adds player restriction tags, saved regions, Figura reload helpers, and reusable bulk commands.
+AbyssCore adds player restriction tags, saved regions, Figura reload helpers, reusable bulk commands, and command key binds.
 
 ## Command Permissions
 
 Most AbyssCore management commands require permission level 2, the same level normally used by operators.
 
-The exception is `/abysscore run <name>`. A saved bulk command can be configured as either available to everyone or OP-only.
+The exceptions are `/abysscore run <name>` and `/abysscore bind ...`. A saved bulk command can be configured as either available to everyone or OP-only, and players can manage their own key binds.
 
 ## Commands
 
@@ -157,6 +157,43 @@ Notes:
 - Saved bulk commands are stored in `config/abysscore_bulk_commands.json`.
 - If one sub-command fails, AbyssCore reports the failed sub-command and continues reporting how many commands ran successfully.
 - Because sub-commands execute from the source that ran `/abysscore run <name>`, selectors like `@s` refer to that player or command source.
+
+### Key Binds
+
+Key binds let players assign one of 9 AbyssCore bind slots to either a saved bulk command or a raw command.
+
+```mcfunction
+/abysscore bind set <slot> <bulkName or raw command>
+/abysscore bind clear <slot>
+/abysscore bind list
+```
+
+Usage:
+
+- `/abysscore bind set <slot> <bulkName or raw command>` saves a command for one bind slot.
+- `<slot>` must be a number from `1` to `9`.
+- If the value matches a saved bulk command name, the bind runs that bulk command.
+- If the value does not match a saved bulk command name, the bind runs it as a raw command.
+- Raw commands should be entered without the leading `/`.
+- `/abysscore bind clear <slot>` removes the command saved in that slot.
+- `/abysscore bind list` shows all 9 slots and their current values.
+- The actual keys are assigned in Minecraft's Controls menu under the AbyssCore category.
+
+Examples:
+
+```mcfunction
+/abysscore bind set 1 starter_kit
+/abysscore bind set 2 effect give @s minecraft:speed 10 1
+/abysscore bind list
+/abysscore bind clear 1
+```
+
+Notes:
+
+- Bind slots are player-specific.
+- Saved binds are stored in `config/abysscore_binds/<uuid>.json`.
+- Bound bulk commands still respect their permission setting when triggered from a key.
+- Bound raw commands execute as the player who pressed the key, so selectors like `@s` refer to that player.
 
 ## License
 

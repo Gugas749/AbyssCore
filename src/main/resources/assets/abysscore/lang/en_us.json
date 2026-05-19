@@ -61,5 +61,24 @@
   "screen.abysscore.bulk.command_hint": "e.g. effect give user minecraft:speed 10 10",
   "screen.abysscore.bulk.max_commands": "Max 10 commands reached",
   "screen.abysscore.bulk.save": "Save",
-  "screen.abysscore.bulk.add_row": "Add Command"
+  "screen.abysscore.bulk.add_row": "Add Command",
+
+  "_comment_key_binds": "--- Key binds ---",
+  "message.abysscore.bind.list_header": "[AbyssCore] Keybinds list:",
+  "message.abysscore.bind.already_empty": "[AbyssCore] Keybind '%s' is already empty.",
+  "message.abysscore.bind.cleared": "[AbyssCore] Keybind '%s' cleared.",
+  "message.abysscore.bind.empty_value": "Empty",
+  "message.abysscore.bind.set_bulk": "[AbyssCore] Keybind '%s' set to bulk command '%s'.",
+  "message.abysscore.bind.set_raw": "[AbyssCore] Keybind '%s' set to raw command '%s'.",
+  "message.abysscore.bind.exec_failed": "[AbyssCore] Bound command failed: %s",
+  "key.categories.abysscore": "AbyssCore",
+  "key.abysscore.bind_1": "Bind 1",
+  "key.abysscore.bind_2": "Bind 2",
+  "key.abysscore.bind_3": "Bind 3",
+  "key.abysscore.bind_4": "Bind 4",
+  "key.abysscore.bind_5": "Bind 5",
+  "key.abysscore.bind_6": "Bind 6",
+  "key.abysscore.bind_7": "Bind 7",
+  "key.abysscore.bind_8": "Bind 8",
+  "key.abysscore.bind_9": "Bind 9"
 }

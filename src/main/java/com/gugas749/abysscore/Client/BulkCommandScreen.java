@@ -1,6 +1,6 @@
 package com.gugas749.abysscore.Client;
 
-import com.gugas749.abysscore.Network.SubmitBulkCommandPacket;
+import com.gugas749.abysscore.Network.Bulk.SubmitBulkCommandPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
@@ -10,7 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 

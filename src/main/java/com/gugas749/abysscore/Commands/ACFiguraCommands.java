@@ -1,7 +1,7 @@
 package com.gugas749.abysscore.Commands;
 
 import com.gugas749.abysscore.Abysscore;
-import com.gugas749.abysscore.Network.FiguraReloadPacket;
+import com.gugas749.abysscore.Network.Figura.FiguraReloadPacket;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;

@@ -1,4 +1,4 @@
-package com.gugas749.abysscore.Network;
+package com.gugas749.abysscore.Network.Figura;
 
 import com.gugas749.abysscore.Abysscore;
 import net.minecraft.client.Minecraft;

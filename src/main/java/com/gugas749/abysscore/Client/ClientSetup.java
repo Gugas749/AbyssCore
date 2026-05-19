@@ -1,8 +1,8 @@
 package com.gugas749.abysscore.Client;
 
-import com.gugas749.abysscore.Network.FiguraReloadPacket;
-import com.gugas749.abysscore.Network.FiguraReloadPacketHandler;
-import com.gugas749.abysscore.Network.OpenBulkScreenPacket;
+import com.gugas749.abysscore.Network.Figura.FiguraReloadPacket;
+import com.gugas749.abysscore.Network.Figura.FiguraReloadPacketHandler;
+import com.gugas749.abysscore.Network.Bulk.OpenBulkScreenPacket;
 import net.minecraft.client.Minecraft;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
