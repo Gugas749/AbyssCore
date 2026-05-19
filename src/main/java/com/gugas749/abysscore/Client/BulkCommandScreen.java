@@ -83,21 +83,19 @@ public class BulkCommandScreen extends Screen {
         }
         rebuildCommandWidgets();
 
-        // Add Row button
-        int addBtnY = panelY + 96 + (VISIBLE_ROWS * ROW_HEIGHT) + 4;
+        // Save / Cancel
+        int btnY = panelY + PANEL_HEIGHT - 24;
+
         addRowButton = Button.builder(
                 Component.literal("+ " + Component.translatable("screen.abysscore.bulk.add_row").getString()),
                 btn -> onAddRow()
-        ).bounds(panelX + 10, addBtnY, 80, 18).build();
+        ).bounds(panelX + 10, btnY, 80, 18).build();
         addRenderableWidget(addRowButton);
-
-        // Save / Cancel
-        int btnY = panelY + PANEL_HEIGHT - 24;
 
         saveButton = Button.builder(
                 Component.translatable("screen.abysscore.bulk.save"),
                 btn -> onSave()
-        ).bounds(panelX + 10, btnY, 100, 18).build();
+        ).bounds(panelX + PANEL_WIDTH - 220, btnY, 100, 18).build();
         addRenderableWidget(saveButton);
 
         cancelButton = Button.builder(
@@ -135,7 +133,7 @@ public class BulkCommandScreen extends Screen {
             final int removeIdx = idx;
             int xBtnFinalY = rowY + 2;
             Button removeBtn = Button.builder(
-                    Component.literal("✕"),
+                    Component.literal("X"),
                     btn -> onRemoveRow(removeIdx)
             ).bounds(panelX + PANEL_WIDTH - 26, xBtnFinalY, 16, 16).build();
             addRenderableWidget(removeBtn);
@@ -246,10 +244,10 @@ public class BulkCommandScreen extends Screen {
 
     @Override
     public void render(GuiGraphics g, int mouseX, int mouseY, float delta) {
-        renderBackground(g, mouseX, mouseY, delta);
+        g.fill(0, 0, width, height, 0x80000000);
 
         // Panel
-        g.fill(panelX, panelY, panelX + PANEL_WIDTH, panelY + PANEL_HEIGHT, 0xCC1A1A1A);
+        g.fill(panelX, panelY, panelX + PANEL_WIDTH, panelY + PANEL_HEIGHT, 0xF21A1A1A);
         g.renderOutline(panelX, panelY, PANEL_WIDTH, PANEL_HEIGHT, 0xFFAAAAAA);
 
         // Title
@@ -274,12 +272,15 @@ public class BulkCommandScreen extends Screen {
 
         // Row count warning
         if (commandBoxes.size() >= MAX_COMMANDS) {
-            g.drawString(font,
-                    Component.translatable("screen.abysscore.bulk.max_commands").getString(),
-                    panelX + 96, panelY + 96 + (VISIBLE_ROWS * ROW_HEIGHT) + 6, 0xFF5555);
+            g.drawString(font, Component.translatable("screen.abysscore.bulk.max_commands").getString(),
+                    panelX + 100, panelY + 86, 0xFF5555);
         }
 
         super.render(g, mouseX, mouseY, delta);
+    }
+
+    @Override
+    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float delta) {
     }
 
     @Override

@@ -12,10 +12,8 @@
   "message.abysscore.protect.invalid_tag": "[AbyssCore] '%s' is not a valid tag. Use: no_build, no_interact, no_fly, no_friendlyfire, no_hunger.",
   "message.abysscore.protect.already_restricted": "[AbyssCore] %s already has the '%s' restriction.",
   "message.abysscore.protect.added_op": "[AbyssCore] Restriction '%s' added for %s.",
-  "message.abysscore.protect.added_player": "[AbyssCore] You have been given the '%s' restriction by an operator.",
   "message.abysscore.protect.not_restricted": "[AbyssCore] %s does not have the '%s' restriction.",
   "message.abysscore.protect.removed_op": "[AbyssCore] Restriction '%s' removed for %s.",
-  "message.abysscore.protect.removed_player": "[AbyssCore] Your '%s' restriction has been lifted.",
   "message.abysscore.protect.status_none": "[AbyssCore] %s has no active restrictions.",
   "message.abysscore.protect.status_active": "[AbyssCore] %s has active restrictions: %s.",
 
@@ -59,6 +57,7 @@
   "screen.abysscore.bulk.perm_label": "Permission",
   "screen.abysscore.bulk.perm_everyone": "Everyone",
   "screen.abysscore.bulk.perm_op": "OP Only",
+  "screen.abysscore.bulk.commands_label": "Commands",
   "screen.abysscore.bulk.command_hint": "e.g. effect give user minecraft:speed 10 10",
   "screen.abysscore.bulk.max_commands": "Max 10 commands reached",
   "screen.abysscore.bulk.save": "Save",
