@@ -2,6 +2,7 @@ modLoader = "javafml" #mandatory
 loaderVersion = "${loader_version_range}" #mandatory
 issueTrackerURL = "https://github.com/Gugas749/AbyssCore/issues"
 license = "${mod_license}"
+mixinConfigs = "abysscore.mixins.json"
 
 [[mods]] #mandatory
 modId = "${mod_id}" #mandatory
@@ -36,6 +37,14 @@ side = "BOTH"
 [[dependencies."${mod_id}"]]
 modId = "worldedit"
 type = "optional"
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"
+
+
+[[dependencies."${mod_id}"]]
+modId = "create"
+type = "optional" #soft dependency
 versionRange = "*"
 ordering = "NONE"
 side = "BOTH"

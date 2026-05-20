@@ -37,30 +37,33 @@ public class ACFiguraCommands {
     // -------------------------------------------------------------------------
 
     private static int executeReloadAll(CommandContext<CommandSourceStack> ctx) {
-        CommandSourceStack source = ctx.getSource();
-        Collection<ServerPlayer> players = source.getServer().getPlayerList().getPlayers();
+        try {
+            CommandSourceStack source = ctx.getSource();
+            Collection<ServerPlayer> players = source.getServer().getPlayerList().getPlayers();
 
-        if (players.isEmpty()) {
-            source.sendFailure(Component.translatable("message.abysscore.figura.no_players"));
-            return 0;
+            if (players.isEmpty()) {
+                source.sendFailure(Component.translatable("message.abysscore.figura.no_players"));
+                return 0;
+            }
+
+            for (ServerPlayer player : players) {
+                PacketDistributor.sendToPlayer(player, new FiguraReloadPacket(false));
+            }
+
+            int total = players.size();
+            source.sendSuccess(
+                    () -> Component.translatable("message.abysscore.figura.reloaded", total, total),
+                    true
+            );
+
+            Abysscore.LOGGER.info("[AbyssCore] Sent Figura reload packet to {} player(s).", total);
+            return total;
+
+        } catch (Exception e) {
+            // This will now show in the server log instead of silently failing
+            Abysscore.LOGGER.error("[AbyssCore] executeReloadAll crashed: {}", e.getMessage(), e);
+            throw e; // rethrow so Minecraft also reports it properly
         }
-
-        // Send our custom S2C packet to every online player.
-        // Their client will receive it and call "figura reload" on the CLIENT dispatcher,
-        // where Figura actually registered it. This is the correct approach since
-        // Figura's reload command is purely client-side.
-        for (ServerPlayer player : players) {
-            PacketDistributor.sendToPlayer(player, new FiguraReloadPacket());
-        }
-
-        int total = players.size();
-        source.sendSuccess(
-                () -> Component.translatable("message.abysscore.figura.reloaded", total, total),
-                true
-        );
-
-        Abysscore.LOGGER.info("[AbyssCore] Sent Figura reload packet to {} player(s).", total);
-        return total;
     }
 
 

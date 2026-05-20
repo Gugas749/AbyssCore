@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.gugas749.abysscore.Mixins",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "NeoForgeWorldEditMixin"
+  ],
+  "injectionPoints": {
+    "defaultRequire": 1
+  }
+}
