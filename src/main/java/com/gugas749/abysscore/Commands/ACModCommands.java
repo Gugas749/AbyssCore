@@ -15,5 +15,6 @@ public class ACModCommands {
         ACRegionCommands.register(event.getDispatcher());
         ACBulkCommands.register(event.getDispatcher());
         ACBindCommands.register(event.getDispatcher());
+        ACStaffCommands.register(event.getDispatcher());
     }
 }

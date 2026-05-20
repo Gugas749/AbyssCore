@@ -2,7 +2,7 @@
 
 Core utility mod for modpacks.
 
-AbyssCore adds player restriction tags, saved regions, Figura reload helpers, reusable bulk commands, and command key binds.
+AbyssCore adds player restriction tags, saved regions, Figura reload helpers, reusable bulk commands, command key binds, and staff mode profile swapping.
 
 ## Command Permissions
 
@@ -46,6 +46,30 @@ Notes:
 - `<targets>` accepts Minecraft player selectors such as `Steve`, `@a`, `@p`, and `@r`.
 - These restrictions are stored as vanilla scoreboard tags on the player.
 - The same tags can also be managed manually with vanilla `/tag`, but `/abysscore protect` validates the tag names and gives clearer feedback.
+
+### Staff Mode
+
+Staff mode swaps a player's normal survival profile with a separate staff profile.
+
+```mcfunction
+/abysscore staff
+/abysscore staff <player>
+/abysscore staff status <player>
+/abysscore staff reset <player>
+```
+
+Usage:
+
+- `/abysscore staff` toggles staff mode for yourself.
+- `/abysscore staff <player>` toggles staff mode for an online player.
+- `/abysscore staff status <player>` shows whether a player is currently in staff mode.
+- `/abysscore staff reset <player>` deletes that player's saved staff profile. The player must not currently be in staff mode.
+
+Notes:
+
+- Profiles are saved in `config/abysscore_staff_profiles`.
+- The swapped profile includes inventory, ender chest, health, hunger, XP, abilities, attributes, active effects, and game mode.
+- Position, dimension, spawn point, recipes, advancements, and UUID are not swapped.
 
 ### Regions
 
