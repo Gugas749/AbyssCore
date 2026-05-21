@@ -2,7 +2,6 @@ package com.gugas749.abysscore.Network;
 
 import com.gugas749.abysscore.Network.Binds.KeyPressHandler;
 import com.gugas749.abysscore.Network.Binds.KeyPressPacket;
-import com.gugas749.abysscore.Network.Bulk.OpenBulkScreenHandler;
 import com.gugas749.abysscore.Network.Bulk.OpenBulkScreenPacket;
 import com.gugas749.abysscore.Network.Bulk.SubmitBulkCommandHandler;
 import com.gugas749.abysscore.Network.Bulk.SubmitBulkCommandPacket;
@@ -11,11 +10,15 @@ import com.gugas749.abysscore.Network.Figura.FiguraReloadPacketHandler;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import com.gugas749.abysscore.Network.Dimen.DimenPacketHandlers;
+import com.gugas749.abysscore.Network.Dimen.OpenDimenCreateScreenPacket;
+import com.gugas749.abysscore.Network.Dimen.SubmitDimenCreatePacket;
 
 public class PacketHandler {
 
@@ -43,6 +46,15 @@ public class PacketHandler {
                         : (pkt, ctx) -> {}
         );
 
+        // open dimension creation screen
+        registrar.playToClient(
+                OpenDimenCreateScreenPacket.TYPE,
+                OpenDimenCreateScreenPacket.CODEC,
+                FMLEnvironment.dist == Dist.CLIENT
+                        ? PacketHandler::handleOpenDimenCreateClient
+                        : (pkt, ctx) -> {}
+        );
+
         // ── C2S (client → server) ────────────────────────────────────────────
 
         registrar.playToServer(
@@ -51,16 +63,26 @@ public class PacketHandler {
                 KeyPressHandler::handle
         );
 
+        // submit new bulk command creation
         registrar.playToServer(
                 SubmitBulkCommandPacket.TYPE,
                 SubmitBulkCommandPacket.CODEC,
                 SubmitBulkCommandHandler::handle
         );
+
+        // submit new dimension creation
+        registrar.playToServer(
+                SubmitDimenCreatePacket.TYPE,
+                SubmitDimenCreatePacket.CODEC,
+                DimenPacketHandlers::handleCreate
+        );
     }
 
-    // Separated into its own method so the BulkCommandScreen/Minecraft references
-    // are only resolved when this method is actually called (client dist only).
-    @net.neoforged.api.distmarker.OnlyIn(Dist.CLIENT)
+    // ─────────────────────────────────────────────────────────────────────────
+    // ── Handlers ─────────────────────────────────────────────────────────────
+    // ─────────────────────────────────────────────────────────────────────────
+
+    @OnlyIn(Dist.CLIENT)
     private static void handleOpenBulkScreenClient(OpenBulkScreenPacket packet, IPayloadContext ctx) {
         ctx.enqueueWork(() ->
                 net.minecraft.client.Minecraft.getInstance()
@@ -68,7 +90,17 @@ public class PacketHandler {
         );
     }
 
+    @OnlyIn(Dist.CLIENT)
+    private static void handleOpenDimenCreateClient(OpenDimenCreateScreenPacket packet, net.neoforged.neoforge.network.handling.IPayloadContext ctx) {
+        ctx.enqueueWork(() ->
+                net.minecraft.client.Minecraft.getInstance()
+                        .setScreen(new com.gugas749.abysscore.Client.DimenCreateScreen())
+        );
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
     // ── Helpers ──────────────────────────────────────────────────────────────
+    // ─────────────────────────────────────────────────────────────────────────
 
     public static void sendToPlayer(CustomPacketPayload packet, ServerPlayer player) {
         PacketDistributor.sendToPlayer(player, packet);

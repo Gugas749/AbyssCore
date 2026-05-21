@@ -4,6 +4,7 @@ import com.gugas749.abysscore.Bulk.BulkCommandManager;
 import com.gugas749.abysscore.Client.ClientTickHandler;
 import com.gugas749.abysscore.Client.KeyBindings;
 import com.gugas749.abysscore.Commands.ACModCommands;
+import com.gugas749.abysscore.Dimen.ACDimensionManager;
 import com.gugas749.abysscore.Network.PacketHandler;
 import com.gugas749.abysscore.Regions.ACBlockProtectionListener;
 import com.mojang.logging.LogUtils;
@@ -54,6 +55,9 @@ public class Abysscore {
 
     private void onServerStarting(ServerStartingEvent event) {
         BulkCommandManager.load();
+        ACDimensionManager.load();   // load registry
+        ACDimensionManager.onServerStarted(event.getServer());  // cleanup pending states
         LOGGER.info("[AbyssCore] Server started, bulk commands loaded.");
+        LOGGER.info("[AbyssCore] Server started, Dimens registry loaded.");
     }
 }

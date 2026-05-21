@@ -12,6 +12,7 @@ import net.minecraft.world.level.saveddata.SavedData;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class ACRegionSavedData extends SavedData {
 
@@ -51,32 +52,67 @@ public class ACRegionSavedData extends SavedData {
         return tag;
     }
 
-    public boolean addRegion(String name, String dimension, BlockPos first, BlockPos second) {
-        if (regions.containsKey(name)) {
-            return false;
-        }
+    // ── Region CRUD ───────────────────────────────────────────────────────────
 
+    public boolean addRegion(String name, String dimension, BlockPos first, BlockPos second) {
+        if (regions.containsKey(name)) return false;
         regions.put(name, ACRegion.fromCorners(name, dimension, first, second));
         setDirty();
         return true;
     }
 
     public boolean removeRegion(String name) {
-        if (regions.remove(name) == null) {
-            return false;
-        }
-
+        if (regions.remove(name) == null) return false;
         setDirty();
         return true;
     }
 
-    public boolean isProtected(String dimension, BlockPos pos) {
+    public Optional<ACRegion> getRegion(String name) {
+        return Optional.ofNullable(regions.get(name));
+    }
+
+    // ── Tag management ────────────────────────────────────────────────────────
+
+    public boolean addTagToRegion(String regionName, String tag) {
+        ACRegion region = regions.get(regionName);
+        if (region == null) return false;
+        if (region.hasTag(tag)) return false;
+
+        // Records are immutable — replace with a new instance that has the tag
+        regions.put(regionName, region.withTag(tag));
+        setDirty();
+        return true;
+    }
+
+    public boolean removeTagFromRegion(String regionName, String tag) {
+        ACRegion region = regions.get(regionName);
+        if (region == null) return false;
+        if (!region.hasTag(tag)) return false;
+
+        regions.put(regionName, region.withoutTag(tag));
+        setDirty();
+        return true;
+    }
+
+    // ── Protection queries ────────────────────────────────────────────────────
+
+    public boolean isRestrictedAt(String dimension, BlockPos pos, String tag) {
         for (ACRegion region : regions.values()) {
-            if (region.contains(dimension, pos)) {
+            if (region.contains(dimension, pos) && region.hasTag(tag)) {
                 return true;
             }
         }
+        return false;
+    }
 
+    /**
+     * Legacy method — kept for backward compatibility.
+     * Returns true if the position is inside ANY region (regardless of tags).
+     */
+    public boolean isProtected(String dimension, BlockPos pos) {
+        for (ACRegion region : regions.values()) {
+            if (region.contains(dimension, pos)) return true;
+        }
         return false;
     }
 

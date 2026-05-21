@@ -2,6 +2,8 @@ package com.gugas749.abysscore.Commands;
 
 import com.gugas749.abysscore.Abysscore;
 import com.gugas749.abysscore.Regions.ACBlockProtectionListener;
+import com.gugas749.abysscore.Regions.ACRegion;
+import com.gugas749.abysscore.Regions.ACRegionSavedData;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -9,24 +11,14 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
-/**
- * /abysscore protect <player(s)> add    <tag>
- * /abysscore protect <player(s)> remove <tag>
- * /abysscore protect <player(s)> status
- *
- * Available tags (tab-completed):
- *   no_build, no_interact, no_fly, no_friendlyfire, no_hunger
- */
 public class ACTagFlagCommands {
 
-    // All available restriction tags
     private static final List<String> ALL_TAGS = List.of(
             ACBlockProtectionListener.NO_BUILD_TAG,
             ACBlockProtectionListener.NO_INTERACT_TAG,
@@ -35,7 +27,16 @@ public class ACTagFlagCommands {
             ACBlockProtectionListener.NO_HUNGER_TAG
     );
 
-    // Tab-completion suggestion provider for tags
+    // Tab-complete region names from the current level's saved data
+    private static final SuggestionProvider<CommandSourceStack> REGION_SUGGESTIONS =
+            (ctx, builder) -> {
+                ACRegionSavedData data = ACRegionSavedData.get(ctx.getSource().getLevel());
+                return SharedSuggestionProvider.suggest(
+                        data.regions().stream().map(ACRegion::name).toList(),
+                        builder
+                );
+            };
+
     private static final SuggestionProvider<CommandSourceStack> TAG_SUGGESTIONS =
             (ctx, builder) -> SharedSuggestionProvider.suggest(ALL_TAGS, builder);
 
@@ -46,7 +47,8 @@ public class ACTagFlagCommands {
                         .requires(source -> source.hasPermission(2))
 
                         .then(Commands.literal("protect")
-                                .then(Commands.argument("targets", EntityArgument.players())
+                                .then(Commands.argument("region", StringArgumentType.word())
+                                        .suggests(REGION_SUGGESTIONS)
 
                                         .then(Commands.literal("add")
                                                 .then(Commands.argument("tag", StringArgumentType.word())
@@ -69,25 +71,26 @@ public class ACTagFlagCommands {
                         )
         );
 
-        Abysscore.LOGGER.info("[AbyssCore] Registered: /abysscore protect <player> <add|remove|status> [tag]");
+        Abysscore.LOGGER.info("[AbyssCore] Registered: /abysscore protect <region> <add|remove|status> [tag]");
     }
-
-    // -------------------------------------------------------------------------
-    // Command logic
-    // -------------------------------------------------------------------------
 
     private static int executeProtect(CommandContext<CommandSourceStack> ctx, Action action) {
         CommandSourceStack source = ctx.getSource();
-        Collection<ServerPlayer> targets;
+        ServerLevel level = source.getLevel();
+        ACRegionSavedData data = ACRegionSavedData.get(level);
 
-        try {
-            targets = EntityArgument.getPlayers(ctx, "targets");
-        } catch (Exception e) {
-            source.sendFailure(Component.translatable("message.abysscore.protect.player_not_found"));
+        String regionName = StringArgumentType.getString(ctx, "region");
+
+        // Validate region exists
+        Optional<ACRegion> regionOpt = data.getRegion(regionName);
+        if (regionOpt.isEmpty()) {
+            source.sendFailure(Component.translatable("message.abysscore.protect.region_not_found", regionName));
             return 0;
         }
 
-        // Get tag argument for add/remove actions
+        ACRegion region = regionOpt.get();
+
+        // Get tag for add/remove
         String tag = null;
         if (action != Action.STATUS) {
             try {
@@ -103,68 +106,55 @@ public class ACTagFlagCommands {
         }
 
         final String finalTag = tag;
-        int affected = 0;
 
-        for (ServerPlayer player : targets) {
-            String playerName = player.getName().getString();
-
-            switch (action) {
-                case ADD -> {
-                    if (player.getTags().contains(finalTag)) {
-                        source.sendSuccess(
-                                () -> Component.translatable("message.abysscore.protect.already_restricted", playerName, finalTag),
-                                false
-                        );
-                    } else {
-                        player.addTag(finalTag);
-                        source.sendSuccess(
-                                () -> Component.translatable("message.abysscore.protect.added_op", playerName, finalTag),
-                                true
-                        );
-                        affected++;
-                    }
+        switch (action) {
+            case ADD -> {
+                boolean added = data.addTagToRegion(regionName, finalTag);
+                if (!added) {
+                    source.sendSuccess(
+                            () -> Component.translatable("message.abysscore.protect.region_already_has_tag", regionName, finalTag),
+                            false
+                    );
+                } else {
+                    source.sendSuccess(
+                            () -> Component.translatable("message.abysscore.protect.region_tag_added", regionName, finalTag),
+                            true
+                    );
                 }
+            }
 
-                case REMOVE -> {
-                    if (!player.getTags().contains(finalTag)) {
-                        source.sendSuccess(
-                                () -> Component.translatable("message.abysscore.protect.not_restricted", playerName, finalTag),
-                                false
-                        );
-                    } else {
-                        player.removeTag(finalTag);
-                        source.sendSuccess(
-                                () -> Component.translatable("message.abysscore.protect.removed_op", playerName, finalTag),
-                                true
-                        );
-                        affected++;
-                    }
+            case REMOVE -> {
+                boolean removed = data.removeTagFromRegion(regionName, finalTag);
+                if (!removed) {
+                    source.sendSuccess(
+                            () -> Component.translatable("message.abysscore.protect.region_no_tag", regionName, finalTag),
+                            false
+                    );
+                } else {
+                    source.sendSuccess(
+                            () -> Component.translatable("message.abysscore.protect.region_tag_removed", regionName, finalTag),
+                            true
+                    );
                 }
+            }
 
-                case STATUS -> {
-                    // Show all active tags for this player
-                    List<String> active = ALL_TAGS.stream()
-                            .filter(t -> player.getTags().contains(t))
-                            .toList();
-
-                    if (active.isEmpty()) {
-                        source.sendSuccess(
-                                () -> Component.translatable("message.abysscore.protect.status_none", playerName),
-                                false
-                        );
-                    } else {
-                        String tagList = String.join(", ", active);
-                        source.sendSuccess(
-                                () -> Component.translatable("message.abysscore.protect.status_active", playerName, tagList),
-                                false
-                        );
-                    }
-                    affected++;
+            case STATUS -> {
+                if (region.tags().isEmpty()) {
+                    source.sendSuccess(
+                            () -> Component.translatable("message.abysscore.protect.region_status_none", regionName),
+                            false
+                    );
+                } else {
+                    String tagList = String.join(", ", region.tags());
+                    source.sendSuccess(
+                            () -> Component.translatable("message.abysscore.protect.region_status_active", regionName, tagList),
+                            false
+                    );
                 }
             }
         }
 
-        return affected;
+        return 1;
     }
 
     private enum Action { ADD, REMOVE, STATUS }

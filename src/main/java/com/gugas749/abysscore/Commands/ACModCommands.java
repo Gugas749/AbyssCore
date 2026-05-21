@@ -10,11 +10,12 @@ public class ACModCommands {
     public void onRegisterCommands(RegisterCommandsEvent event) {
         Abysscore.LOGGER.info("[AbyssCore] Registering commands...");
 
-        ACFiguraCommands.register(event.getDispatcher());
+        //ACFiguraCommands.register(event.getDispatcher());
         ACTagFlagCommands.register(event.getDispatcher());
         ACRegionCommands.register(event.getDispatcher());
         ACBulkCommands.register(event.getDispatcher());
         ACBindCommands.register(event.getDispatcher());
         ACStaffCommands.register(event.getDispatcher());
+        ACDimenCommands.register(event.getDispatcher());
     }
 }

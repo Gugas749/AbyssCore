@@ -7,18 +7,19 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * Fixes a crash caused by Create mod's Deployer fake player interacting with WorldEdit.
+ */
 @Mixin(value = NeoForgeWorldEdit.class, remap = false)
-public class NeoForgePlayerMixin {
+public class NeoForgeWorldEditMixin {
 
     @Inject(method = "onRightClickBlock", at = @At("HEAD"), cancellable = true)
     private void abysscore$guardFakePlayer(PlayerInteractEvent.RightClickBlock event, CallbackInfo ci) {
-        // Create Deployer fake player has no active game packet listener.
-        // ServerPlayer.hasDisconnected() returns true when connection is absent,
-        // which is always the case for fake/simulated players.
         if (!(event.getEntity() instanceof net.minecraft.server.level.ServerPlayer sp)) return;
-        if (sp.hasDisconnected()) {
+
+        // ServerPlayer.connection is null for fake players (Create Deployer)«
+        if (sp.connection == null) {
             ci.cancel();
         }
     }
 }
-
