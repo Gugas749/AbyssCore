@@ -14,16 +14,6 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.*;
 
-/**
- * Tracks which players are currently vanished.
- *
- * Rules:
- *   - Vanished players are completely invisible to non-vanished players
- *   - Vanished players CAN see each other
- *   - Vanished players cannot be heard via voice chat by non-vanished players
- *   - Vanished players CAN hear each other via voice chat
- *   - Team membership does NOT bypass vanish
- */
 public class ACVanishManager {
 
     private static final Set<UUID> vanishedPlayers = new HashSet<>();
@@ -109,11 +99,7 @@ public class ACVanishManager {
 
     // ── Packet helpers ────────────────────────────────────────────────────────
 
-    /**
-     * Hides 'target' from 'viewer' by removing their entity and tab list entry.
-     */
     public static void hideFromPlayer(ServerPlayer target, ServerPlayer viewer) {
-        // FIX: ClientboundPlayerInfoRemovePacket takes List<UUID>, not a static .of()
         viewer.connection.send(
                 new ClientboundRemoveEntitiesPacket(target.getId())
         );
@@ -122,9 +108,6 @@ public class ACVanishManager {
         );
     }
 
-    /**
-     * Shows 'target' to 'viewer' by re-sending their tab list entry and spawn packet.
-     */
     public static void showToPlayer(ServerPlayer target, ServerPlayer viewer) {
         // Re-add to tab list
         viewer.connection.send(
@@ -134,15 +117,14 @@ public class ACVanishManager {
         viewer.connection.send(
                 new ClientboundAddEntityPacket(target, 0, target.blockPosition())
         );
-        // FIX: refreshEntityData doesn't exist on ServerPlayer — sync entity data manually
-        // getNonDefaultValues() can be null so guard it
+
         var nonDefault = target.getEntityData().getNonDefaultValues();
         if (nonDefault != null && !nonDefault.isEmpty()) {
             viewer.connection.send(
                     new ClientboundSetEntityDataPacket(target.getId(), nonDefault)
             );
         }
-        // Also send equipment so armor/items are visible
+
         viewer.connection.send(
                 new ClientboundSetEquipmentPacket(
                         target.getId(),

@@ -10,12 +10,6 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.*;
 
-/**
- * Manages active /abysshelp requests.
- *
- * One active request per player at a time.
- * Request stays active until a staff member accepts it or the player cancels.
- */
 public class ACHelpManager {
 
     // playerUUID → active request
@@ -23,10 +17,6 @@ public class ACHelpManager {
 
     // ── Submit ────────────────────────────────────────────────────────────────
 
-    /**
-     * Submits a new help request.
-     * Returns false if the player already has an active request.
-     */
     public static boolean submit(ServerPlayer player, String reason, MinecraftServer server) {
         if (activeRequests.containsKey(player.getUUID())) return false;
 
@@ -41,24 +31,14 @@ public class ACHelpManager {
         return true;
     }
 
-    /**
-     * Cancels the active request for a player.
-     * Returns false if there was no active request.
-     */
     public static boolean cancel(ServerPlayer player) {
         return activeRequests.remove(player.getUUID()) != null;
     }
 
-    /**
-     * Returns the active request for a player, or empty.
-     */
     public static Optional<ACHelpRequest> getRequest(UUID playerUUID) {
         return Optional.ofNullable(activeRequests.get(playerUUID));
     }
 
-    /**
-     * Returns all active requests.
-     */
     public static Collection<ACHelpRequest> getAll() {
         return Collections.unmodifiableCollection(activeRequests.values());
     }
@@ -69,15 +49,6 @@ public class ACHelpManager {
 
     // ── Accept ────────────────────────────────────────────────────────────────
 
-    /**
-     * Staff accepts a help request:
-     * - TPs the staff member to the requesting player
-     * - Notifies the requesting player
-     * - Removes the request
-     *
-     * @param staff       the staff member accepting the request
-     * @param targetUUID  UUID of the player whose request is being accepted
-     */
     public static boolean accept(ServerPlayer staff, UUID targetUUID) {
         ACHelpRequest request = activeRequests.get(targetUUID);
         if (request == null) return false;
@@ -112,10 +83,6 @@ public class ACHelpManager {
 
     // ── Staff notification ────────────────────────────────────────────────────
 
-    /**
-     * Sends the help request notification to all online staff members
-     * who currently have staff mode active.
-     */
     private static void notifyStaff(ACHelpRequest request, MinecraftServer server) {
         List<ServerPlayer> staffOnline = server.getPlayerList().getPlayers().stream()
             .filter(p -> StaffProfileManager.isStaffMode(p) || p.hasPermissions(2))

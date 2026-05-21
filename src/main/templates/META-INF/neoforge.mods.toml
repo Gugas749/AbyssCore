@@ -41,9 +41,15 @@ versionRange = "*"
 ordering = "NONE"
 side = "BOTH"
 
-
 [[dependencies."${mod_id}"]]
 modId = "create"
+type = "optional" #soft dependency
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies."${mod_id}"]]
+modId = "simple_voice_chat"
 type = "optional" #soft dependency
 versionRange = "*"
 ordering = "NONE"

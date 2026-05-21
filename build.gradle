@@ -108,6 +108,8 @@ dependencies {
     compileOnly "curse.maven:accessories-938917:7583320"
 
     compileOnly "curse.maven:cosmetic-armor-reworked-237307:5610814"
+
+    compileOnly "curse.maven:simple-voice-chat-416089:8037683"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

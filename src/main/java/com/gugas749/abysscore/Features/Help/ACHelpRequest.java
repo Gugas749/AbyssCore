@@ -2,9 +2,6 @@ package com.gugas749.abysscore.Features.Help;
 
 import java.util.UUID;
 
-/**
- * Represents an active /abysshelp request from a player.
- */
 public class ACHelpRequest {
 
     public final UUID playerUUID;
