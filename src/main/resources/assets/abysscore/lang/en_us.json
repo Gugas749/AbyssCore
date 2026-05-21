@@ -126,5 +126,32 @@
   "screen.abysscore.dimen.create.style": "Style",
   "screen.abysscore.dimen.create.random_seed": "Random",
   "screen.abysscore.dimen.create.create": "Create",
-  "screen.abysscore.dimen.create.seed_label": "Seed"
+  "screen.abysscore.dimen.create.seed_label": "Seed",
+
+  "_comment_help": "--- /abysshelp ---",
+  "message.abysscore.help.player_only":        "[AbyssCore] This command can only be used by a player.",
+  "message.abysscore.help.already_pending":    "[AbyssCore] You already have an active help request. Use /abysshelp cancel to cancel it.",
+  "message.abysscore.help.submitted":          "[AbyssCore] Your help request has been sent to the staff. Please wait.",
+  "message.abysscore.help.cancelled":          "[AbyssCore] Your help request has been cancelled.",
+  "message.abysscore.help.no_request":         "[AbyssCore] You do not have an active help request.",
+  "message.abysscore.help.no_request_for":     "[AbyssCore] %s does not have an active help request.",
+  "message.abysscore.help.player_not_found":   "[AbyssCore] Player not found.",
+  "message.abysscore.help.accept_failed":      "[AbyssCore] Could not accept the request for %s.",
+  "message.abysscore.help.accepted":           "[AbyssCore] A staff member (%s) has accepted your request and is on their way.",
+  "message.abysscore.help.staff_accepted":     "[AbyssCore] You have accepted the help request from %s and teleported to them.",
+  "message.abysscore.help.notification":       "§c[Help Request] §e%s §7needs help: §f%s",
+  "message.abysscore.help.tp_button":          " §a§l[TP]",
+  "message.abysscore.help.tp_hover":           "Teleport to %s and accept their request",
+  "message.abysscore.help.list_empty":         "[AbyssCore] No active help requests.",
+  "message.abysscore.help.list_header":        "[AbyssCore] Active help requests (%s):",
+
+  "_comment_vanish": "--- /abysscore vanish ---",
+  "message.abysscore.vanish.player_only":      "[AbyssCore] This command can only be used by a player.",
+  "message.abysscore.vanish.player_not_found": "[AbyssCore] Player not found.",
+  "message.abysscore.vanish.enabled":          "[AbyssCore] %s is now vanished.",
+  "message.abysscore.vanish.disabled":         "[AbyssCore] %s is no longer vanished.",
+  "message.abysscore.vanish.enabled_self":     "[AbyssCore] You are now vanished.",
+  "message.abysscore.vanish.disabled_self":    "[AbyssCore] You are no longer vanished.",
+  "message.abysscore.vanish.list_empty":       "[AbyssCore] No players are currently vanished.",
+  "message.abysscore.vanish.list_header":      "[AbyssCore] Vanished players (%s):"
 }

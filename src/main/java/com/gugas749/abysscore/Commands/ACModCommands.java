@@ -1,6 +1,7 @@
 package com.gugas749.abysscore.Commands;
 
 import com.gugas749.abysscore.Abysscore;
+import com.gugas749.abysscore.Commands.SubRegisters.*;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
@@ -17,5 +18,7 @@ public class ACModCommands {
         ACBindCommands.register(event.getDispatcher());
         ACStaffCommands.register(event.getDispatcher());
         ACDimenCommands.register(event.getDispatcher());
+        ACHelpCommands.register(event.getDispatcher());
+        ACVanishCommands.register(event.getDispatcher());
     }
 }

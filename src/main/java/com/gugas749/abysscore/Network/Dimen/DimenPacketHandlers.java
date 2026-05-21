@@ -1,15 +1,10 @@
 package com.gugas749.abysscore.Network.Dimen;
 
 import com.gugas749.abysscore.Abysscore;
-import com.gugas749.abysscore.Dimen.ACDimensionData;
-import com.gugas749.abysscore.Dimen.ACDimensionManager;
+import com.gugas749.abysscore.Features.Dimen.ACDimensionData;
+import com.gugas749.abysscore.Features.Dimen.ACDimensionManager;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.storage.ServerLevelData;
-import net.minecraft.world.level.storage.WorldData;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.Random;

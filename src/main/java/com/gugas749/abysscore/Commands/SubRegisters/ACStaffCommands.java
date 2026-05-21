@@ -1,7 +1,7 @@
-package com.gugas749.abysscore.Commands;
+package com.gugas749.abysscore.Commands.SubRegisters;
 
 import com.gugas749.abysscore.Abysscore;
-import com.gugas749.abysscore.Staff.StaffProfileManager;
+import com.gugas749.abysscore.Features.Staff.StaffProfileManager;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;

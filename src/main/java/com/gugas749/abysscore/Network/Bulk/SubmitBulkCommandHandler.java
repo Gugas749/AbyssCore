@@ -1,8 +1,8 @@
 package com.gugas749.abysscore.Network.Bulk;
 
 import com.gugas749.abysscore.Abysscore;
-import com.gugas749.abysscore.Bulk.BulkCommandData;
-import com.gugas749.abysscore.Bulk.BulkCommandManager;
+import com.gugas749.abysscore.Features.Bulk.BulkCommandData;
+import com.gugas749.abysscore.Features.Bulk.BulkCommandManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;

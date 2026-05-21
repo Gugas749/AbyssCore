@@ -1,4 +1,4 @@
-package com.gugas749.abysscore.Bulk;
+package com.gugas749.abysscore.Features.Bulk;
 
 import java.util.ArrayList;
 import java.util.List;

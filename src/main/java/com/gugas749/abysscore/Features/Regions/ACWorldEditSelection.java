@@ -1,4 +1,4 @@
-package com.gugas749.abysscore.Regions;
+package com.gugas749.abysscore.Features.Regions;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;

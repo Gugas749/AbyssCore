@@ -1,4 +1,4 @@
-package com.gugas749.abysscore.Bind;
+package com.gugas749.abysscore.Features.Bind;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

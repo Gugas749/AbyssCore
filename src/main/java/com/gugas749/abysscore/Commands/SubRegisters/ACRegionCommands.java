@@ -1,9 +1,9 @@
-package com.gugas749.abysscore.Commands;
+package com.gugas749.abysscore.Commands.SubRegisters;
 
 import com.gugas749.abysscore.Abysscore;
-import com.gugas749.abysscore.Regions.ACRegion;
-import com.gugas749.abysscore.Regions.ACRegionSavedData;
-import com.gugas749.abysscore.Regions.ACWorldEditSelection;
+import com.gugas749.abysscore.Features.Regions.ACRegion;
+import com.gugas749.abysscore.Features.Regions.ACRegionSavedData;
+import com.gugas749.abysscore.Features.Regions.ACWorldEditSelection;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;

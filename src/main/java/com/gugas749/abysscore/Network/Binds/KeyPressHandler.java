@@ -1,9 +1,9 @@
 package com.gugas749.abysscore.Network.Binds;
 
 import com.gugas749.abysscore.Abysscore;
-import com.gugas749.abysscore.Bind.BindManager;
-import com.gugas749.abysscore.Bulk.BulkCommandData;
-import com.gugas749.abysscore.Bulk.BulkCommandManager;
+import com.gugas749.abysscore.Features.Bind.BindManager;
+import com.gugas749.abysscore.Features.Bulk.BulkCommandData;
+import com.gugas749.abysscore.Features.Bulk.BulkCommandManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;

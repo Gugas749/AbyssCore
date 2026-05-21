@@ -1,8 +1,8 @@
-package com.gugas749.abysscore.Commands;
+package com.gugas749.abysscore.Commands.SubRegisters;
 
 import com.gugas749.abysscore.Abysscore;
-import com.gugas749.abysscore.Dimen.ACDimensionData;
-import com.gugas749.abysscore.Dimen.ACDimensionManager;
+import com.gugas749.abysscore.Features.Dimen.ACDimensionData;
+import com.gugas749.abysscore.Features.Dimen.ACDimensionManager;
 import com.gugas749.abysscore.Network.Dimen.OpenDimenCreateScreenPacket;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;

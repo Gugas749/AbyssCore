@@ -1,4 +1,4 @@
-package com.gugas749.abysscore.Staff;
+package com.gugas749.abysscore.Features.Staff;
 
 import com.gugas749.abysscore.Abysscore;
 import lain.mods.cos.api.CosArmorAPI;
@@ -14,7 +14,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
-import net.neoforged.neoforge.attachment.AttachmentType;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.io.IOException;
@@ -186,7 +185,7 @@ public class StaffProfileManager {
 
         // ── Accessories ───────────────────────────────────────────────────────
         if (ModList.get().isLoaded("accessories")) {
-            saveAccessories(player, profileTag);
+            //saveAccessories(player, profileTag);
         }
 
         // ── Cosmetic Armor ────────────────────────────────────────────────────
@@ -216,24 +215,48 @@ public class StaffProfileManager {
 
     private static void saveAccessories(ServerPlayer player, CompoundTag profileTag) {
         try {
-            Class<?> capClass = Class.forName("io.wispforest.accessories.api.AccessoriesCapability");
-            java.lang.reflect.Method getMethod = capClass.getMethod("get", net.minecraft.world.entity.LivingEntity.class);
-            Object cap = getMethod.invoke(null, player);
+            // Accessories stores its inventory data in the NeoForge attachment system.
+            // The correct way to access it is through the player's serialized NBT,
+            // specifically the "neoforge:attachments" subtag.
+            // We call addAdditionalSaveData which flushes attachment state into the tag.
+            CompoundTag entityTag = new CompoundTag();
+            player.addAdditionalSaveData(entityTag);
 
-            if (cap == null) {
-                Abysscore.LOGGER.debug("[AbyssCore] No Accessories capability on player, skipping save.");
-                return;
+            // Accessories attachment key in the serialized NBT
+            if (entityTag.contains("neoforge:attachments")) {
+                CompoundTag attachments = entityTag.getCompound("neoforge:attachments");
+
+                // Try both known Accessories attachment keys across versions
+                String foundKey = null;
+                for (String candidate : new String[]{
+                        "accessories:accessories_holder",
+                        "accessories:capability",
+                        "accessories:data"
+                }) {
+                    if (attachments.contains(candidate)) {
+                        foundKey = candidate;
+                        break;
+                    }
+                }
+
+                if (foundKey != null) {
+                    // Save the entire accessories attachment subtag
+                    CompoundTag accessoriesTag = new CompoundTag();
+                    accessoriesTag.put("key", net.minecraft.nbt.StringTag.valueOf(foundKey));
+                    accessoriesTag.put("data", attachments.getCompound(foundKey).copy());
+                    profileTag.put(ACCESSORIES_KEY, accessoriesTag);
+                    Abysscore.LOGGER.debug("[AbyssCore] Saved Accessories via attachment key '{}'.", foundKey);
+                } else {
+                    // Log all available attachment keys to help diagnose if key changed
+                    Abysscore.LOGGER.warn(
+                            "[AbyssCore] Accessories attachment key not found. Available keys: {}",
+                            attachments.getAllKeys()
+                    );
+                }
+            } else {
+                Abysscore.LOGGER.debug("[AbyssCore] No neoforge:attachments found on player, skipping Accessories save.");
             }
 
-            // AccessoriesCapability has a writeToNbt(CompoundTag) method
-            java.lang.reflect.Method writeMethod = cap.getClass().getMethod("writeToNbt", CompoundTag.class);
-            CompoundTag accessoriesTag = new CompoundTag();
-            writeMethod.invoke(cap, accessoriesTag);
-            profileTag.put(ACCESSORIES_KEY, accessoriesTag);
-            Abysscore.LOGGER.debug("[AbyssCore] Saved Accessories inventory via capability.");
-
-        } catch (ClassNotFoundException e) {
-            Abysscore.LOGGER.debug("[AbyssCore] Accessories not found, skipping save.");
         } catch (Exception e) {
             Abysscore.LOGGER.warn("[AbyssCore] Failed to save Accessories inventory: {}", e.getMessage());
         }
@@ -305,7 +328,7 @@ public class StaffProfileManager {
 
         // ── Accessories ───────────────────────────────────────────────────────
         if (ModList.get().isLoaded("accessories") && profileTag.contains(ACCESSORIES_KEY)) {
-            applyAccessories(player, profileTag);
+            //applyAccessories(player, profileTag);
         }
 
         // ── Cosmetic Armor ────────────────────────────────────────────────────
@@ -334,26 +357,31 @@ public class StaffProfileManager {
 
     private static void applyAccessories(ServerPlayer player, CompoundTag profileTag) {
         try {
-            Class<?> capClass = Class.forName("io.wispforest.accessories.api.AccessoriesCapability");
-            java.lang.reflect.Method getMethod = capClass.getMethod("get", net.minecraft.world.entity.LivingEntity.class);
-            Object cap = getMethod.invoke(null, player);
-
-            if (cap == null) {
-                Abysscore.LOGGER.debug("[AbyssCore] No Accessories capability on player, skipping apply.");
-                return;
-            }
-
-            // AccessoriesCapability has a readFromNbt(CompoundTag) method
             CompoundTag accessoriesTag = profileTag.getCompound(ACCESSORIES_KEY);
-            java.lang.reflect.Method readMethod = cap.getClass().getMethod("readFromNbt", CompoundTag.class);
-            readMethod.invoke(cap, accessoriesTag);
+            if (accessoriesTag.isEmpty()) return;
 
-            // Sync changes to the client
+            String key = accessoriesTag.getString("key");
+            CompoundTag data = accessoriesTag.getCompound("data");
+
+            if (key.isEmpty() || data.isEmpty()) return;
+
+            // Apply by injecting back into the player's NBT via readAdditionalSaveData.
+            // We build a minimal tag with just the attachment we want to restore.
+            CompoundTag attachments = new CompoundTag();
+            attachments.put(key, data.copy());
+
+            CompoundTag wrapper = new CompoundTag();
+            wrapper.put("neoforge:attachments", attachments);
+
+            // readAdditionalSaveData will pick up the attachment and restore it
+            player.readAdditionalSaveData(wrapper);
+
+            // Force inventory sync — Accessories hooks into this to push updates to client
+            player.getInventory().setChanged();
             player.inventoryMenu.broadcastChanges();
-            Abysscore.LOGGER.debug("[AbyssCore] Applied Accessories inventory via capability.");
 
-        } catch (ClassNotFoundException e) {
-            Abysscore.LOGGER.debug("[AbyssCore] Accessories not found, skipping apply.");
+            Abysscore.LOGGER.debug("[AbyssCore] Applied Accessories via attachment key '{}'.", key);
+
         } catch (Exception e) {
             Abysscore.LOGGER.warn("[AbyssCore] Failed to apply Accessories inventory: {}", e.getMessage());
         }
@@ -418,7 +446,7 @@ public class StaffProfileManager {
     }
 
     // =========================================================================
-    // Gamemode helpers (Fix #4)
+    // Gamemode helpers
     // =========================================================================
 
     private static GameType readStoredStaffGameType(UUID uuid) {

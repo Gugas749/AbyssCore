@@ -1,12 +1,14 @@
 package com.gugas749.abysscore;
 
-import com.gugas749.abysscore.Bulk.BulkCommandManager;
+import com.gugas749.abysscore.Features.Bulk.BulkCommandManager;
 import com.gugas749.abysscore.Client.ClientTickHandler;
 import com.gugas749.abysscore.Client.KeyBindings;
 import com.gugas749.abysscore.Commands.ACModCommands;
-import com.gugas749.abysscore.Dimen.ACDimensionManager;
+import com.gugas749.abysscore.Features.Dimen.ACDimensionManager;
+import com.gugas749.abysscore.Features.Vanish.ACSimpleVoiceChatIntegration;
+import com.gugas749.abysscore.Features.Vanish.ACVanishListener;
 import com.gugas749.abysscore.Network.PacketHandler;
-import com.gugas749.abysscore.Regions.ACBlockProtectionListener;
+import com.gugas749.abysscore.Features.Regions.ACBlockProtectionListener;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -41,11 +43,13 @@ public class Abysscore {
         NeoForge.EVENT_BUS.register(new ACModCommands());
         NeoForge.EVENT_BUS.register(new ACBlockProtectionListener());
         NeoForge.EVENT_BUS.addListener(this::onServerStarting);
+        NeoForge.EVENT_BUS.register(new ACVanishListener());
 
         modEventBus.addListener(this::commonSetup);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        ACSimpleVoiceChatIntegration.init();
         event.enqueueWork(() -> LOGGER.info("[AbyssCore] Successfully loaded!"));
     }
 

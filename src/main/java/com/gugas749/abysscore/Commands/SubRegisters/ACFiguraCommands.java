@@ -1,4 +1,4 @@
-package com.gugas749.abysscore.Commands;
+package com.gugas749.abysscore.Commands.SubRegisters;
 
 import com.gugas749.abysscore.Abysscore;
 import com.gugas749.abysscore.Network.Figura.FiguraReloadPacket;

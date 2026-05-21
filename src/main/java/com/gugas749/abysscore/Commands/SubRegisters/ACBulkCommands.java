@@ -1,8 +1,8 @@
-package com.gugas749.abysscore.Commands;
+package com.gugas749.abysscore.Commands.SubRegisters;
 
 import com.gugas749.abysscore.Abysscore;
-import com.gugas749.abysscore.Bulk.BulkCommandData;
-import com.gugas749.abysscore.Bulk.BulkCommandManager;
+import com.gugas749.abysscore.Features.Bulk.BulkCommandData;
+import com.gugas749.abysscore.Features.Bulk.BulkCommandManager;
 import com.gugas749.abysscore.Network.Bulk.OpenBulkScreenPacket;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;

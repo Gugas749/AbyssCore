@@ -1,4 +1,4 @@
-package com.gugas749.abysscore.Dimen;
+package com.gugas749.abysscore.Features.Dimen;
 
 import com.google.gson.JsonObject;
 
