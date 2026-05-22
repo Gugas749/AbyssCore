@@ -4,7 +4,8 @@
   "package": "com.gugas749.abysscore.Mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "NeoForgeWorldEditMixin"
+    "NeoForgeWorldEditMixin",
+    "EntityPassengerMixin"
   ],
   "injectionPoints": {
     "defaultRequire": 1

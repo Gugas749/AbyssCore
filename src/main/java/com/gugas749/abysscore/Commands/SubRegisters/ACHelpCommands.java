@@ -7,18 +7,13 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.UUID;
 
-/**
- * /abysshelp <reason>       — any player calls for staff help
- * /abysshelp cancel         — player cancels their active request
- * /abysshelp list           — OPs see all active requests
- * /abysscore helpaccept <player> — staff accepts a help request (also triggered by chat button)
- */
 public class ACHelpCommands {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -46,13 +41,19 @@ public class ACHelpCommands {
 
         // ── /abysscore helpaccept <player> ────────────────────────────────────
         dispatcher.register(
-            Commands.literal("abysscore")
-                .requires(source -> source.hasPermission(2))
-                .then(Commands.literal("helpaccept")
-                    .then(Commands.argument("target", EntityArgument.player())
-                        .executes(ACHelpCommands::executeAccept)
-                    )
-                )
+                Commands.literal("abysscore")
+                        .requires(source -> source.hasPermission(2))
+                        .then(Commands.literal("helpaccept")
+                                .then(Commands.argument("target", StringArgumentType.word())
+                                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
+                                                ACHelpManager.getAll().stream()
+                                                        .map(r -> r.playerName)
+                                                        .toList(),
+                                                builder
+                                        ))
+                                        .executes(ACHelpCommands::executeAccept)
+                                )
+                        )
         );
 
         Abysscore.LOGGER.info("[AbyssCore] Registered: /abysshelp and /abysscore helpaccept");
@@ -148,19 +149,17 @@ public class ACHelpCommands {
             return 0;
         }
 
-        ServerPlayer target;
-        try {
-            target = EntityArgument.getPlayer(ctx, "target");
-        } catch (Exception e) {
-            source.sendFailure(Component.translatable("message.abysscore.help.player_not_found"));
-            return 0;
-        }
+        String targetName = StringArgumentType.getString(ctx, "target");
 
-        UUID targetUUID = target.getUUID();
+        UUID targetUUID = ACHelpManager.getAll().stream()
+                .filter(r -> r.playerName.equalsIgnoreCase(targetName))
+                .map(r -> r.playerUUID)
+                .findFirst()
+                .orElse(null);
 
-        if (!ACHelpManager.hasActiveRequest(targetUUID)) {
+        if (targetUUID == null) {
             source.sendFailure(
-                Component.translatable("message.abysscore.help.no_request_for", target.getName().getString())
+                    Component.translatable("message.abysscore.help.no_request_for", targetName)
             );
             return 0;
         }
@@ -168,7 +167,7 @@ public class ACHelpCommands {
         boolean accepted = ACHelpManager.accept(staff, targetUUID);
         if (!accepted) {
             source.sendFailure(
-                Component.translatable("message.abysscore.help.accept_failed", target.getName().getString())
+                    Component.translatable("message.abysscore.help.accept_failed", targetName)
             );
             return 0;
         }

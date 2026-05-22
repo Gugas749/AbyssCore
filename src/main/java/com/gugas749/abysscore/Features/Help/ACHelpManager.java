@@ -1,6 +1,7 @@
 package com.gugas749.abysscore.Features.Help;
 
 import com.gugas749.abysscore.Features.Staff.StaffProfileManager;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -55,27 +56,38 @@ public class ACHelpManager {
 
         ServerPlayer target = staff.getServer().getPlayerList().getPlayer(targetUUID);
         if (target == null) {
-            // Player went offline — clean up request
             activeRequests.remove(targetUUID);
             return false;
         }
 
-        // TP staff to player
-        target.teleportTo(
-            target.serverLevel(),
-            target.getX(), target.getY(), target.getZ(),
-            staff.getYRot(), staff.getXRot()
+        staff.teleportTo(
+                target.serverLevel(),
+                target.getX(),
+                target.getY(),
+                target.getZ(),
+                staff.getYRot(),
+                staff.getXRot()
         );
 
-        // Notify the requesting player
         target.sendSystemMessage(
-            Component.translatable("message.abysscore.help.accepted", staff.getName().getString())
+                Component.translatable("message.abysscore.help.accepted", staff.getName().getString())
         );
 
-        // Notify the staff member
         staff.sendSystemMessage(
-            Component.translatable("message.abysscore.help.staff_accepted", request.playerName)
+                Component.translatable("message.abysscore.help.staff_accepted", request.playerName)
         );
+
+        Component broadcastMsg = Component.translatable(
+                "message.abysscore.help.staff_broadcast",
+                staff.getName().getString(),
+                request.playerName
+        ).withStyle(ChatFormatting.GRAY);
+
+        for (ServerPlayer other : staff.getServer().getPlayerList().getPlayers()) {
+            if (other.getUUID().equals(staff.getUUID())) continue;
+            if (!other.hasPermissions(2)) continue;
+            other.sendSystemMessage(broadcastMsg);
+        }
 
         activeRequests.remove(targetUUID);
         return true;

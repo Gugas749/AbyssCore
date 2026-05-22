@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -16,11 +17,12 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 public class ACBlockProtectionListener {
 
     // ── Tag constants ─────────────────────────────────────────────────────────
-    public static final String NO_BUILD_TAG        = "no_build";
-    public static final String NO_INTERACT_TAG     = "no_interact";
-    public static final String NO_FLY_TAG          = "no_fly";
+    public static final String NO_BUILD_TAG = "no_build";
+    public static final String NO_INTERACT_TAG = "no_interact";
+    public static final String NO_FLY_TAG = "no_fly";
     public static final String NO_FRIENDLYFIRE_TAG = "no_friendlyfire";
-    public static final String NO_HUNGER_TAG       = "no_hunger";
+    public static final String NO_HUNGER_TAG = "no_hunger";
+    public static final String NO_TP_TAG = "no_tp";
 
     // ── no_build — block break ────────────────────────────────────────────────
 
@@ -124,6 +126,55 @@ public class ACBlockProtectionListener {
         if (isRestrictedAt(attacker, pos, NO_FRIENDLYFIRE_TAG)) {
             event.setCanceled(true);
             notify(attacker, "message.abysscore.no_friendlyfire_blocked");
+        }
+    }
+
+    // ── no_tp — block ender pearl teleportation ───────────────────────────────
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onEnderPearlTeleport(EntityTeleportEvent.EnderPearl event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (isExempt(player)) return;
+
+        BlockPos pos = player.blockPosition();
+        if (isRestrictedAt(player, pos, NO_TP_TAG)) {
+            event.setCanceled(true);
+            notify(player, "message.abysscore.no_tp_blocked");
+        }
+    }
+
+    // ── no_tp — block chorus fruit teleportation ──────────────────────────────
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onChorusFruitTeleport(EntityTeleportEvent.ChorusFruit event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (isExempt(player)) return;
+
+        BlockPos pos = player.blockPosition();
+        if (isRestrictedAt(player, pos, NO_TP_TAG)) {
+            event.setCanceled(true);
+            notify(player, "message.abysscore.no_tp_blocked");
+        }
+    }
+
+    // ── no_tp — others ─────────────────────────────────────────────────────────
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onGenericTeleport(EntityTeleportEvent event) {
+        // Skip the subclasses we explicitly allow
+        if (event instanceof EntityTeleportEvent.TeleportCommand) return;
+        if (event instanceof EntityTeleportEvent.SpreadPlayersCommand) return;
+        // Skip EnderPearl and ChorusFruit since we handle them above
+        if (event instanceof EntityTeleportEvent.EnderPearl) return;
+        if (event instanceof EntityTeleportEvent.ChorusFruit) return;
+
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (isExempt(player)) return;
+
+        BlockPos pos = player.blockPosition();
+        if (isRestrictedAt(player, pos, NO_TP_TAG)) {
+            event.setCanceled(true);
+            notify(player, "message.abysscore.no_tp_blocked");
         }
     }
 

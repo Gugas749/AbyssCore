@@ -10,6 +10,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -22,7 +23,6 @@ import java.util.Optional;
 public class ACDimenCommands {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-
         dispatcher.register(
             Commands.literal("abysscore")
                 .requires(source -> source.hasPermission(2))
@@ -31,7 +31,7 @@ public class ACDimenCommands {
 
                     // ── tp ────────────────────────────────────────────────────
                     .then(Commands.literal("tp")
-                        .then(Commands.argument("dimension", StringArgumentType.word())
+                        .then(Commands.argument("dimension", ResourceLocationArgument.id())
                             .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
                                 getAllLoadedDimKeys(ctx.getSource().getServer()), builder
                             ))
@@ -51,9 +51,9 @@ public class ACDimenCommands {
 
                     // ── unload ────────────────────────────────────────────────
                     .then(Commands.literal("unload")
-                        .then(Commands.argument("dimension", StringArgumentType.word())
+                        .then(Commands.argument("dimension", ResourceLocationArgument.id())
                             .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
-                                getManagedLoadedDimNames(), builder
+                                getUnloadableDimKeys(ctx.getSource().getServer()), builder
                             ))
                             .executes(ACDimenCommands::executeUnload)
                         )
@@ -61,7 +61,7 @@ public class ACDimenCommands {
 
                     // ── load ──────────────────────────────────────────────────
                     .then(Commands.literal("load")
-                        .then(Commands.argument("dimension", StringArgumentType.word())
+                        .then(Commands.argument("dimension", ResourceLocationArgument.id())
                             .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
                                 getManagedUnloadedDimNames(), builder
                             ))
@@ -71,7 +71,7 @@ public class ACDimenCommands {
 
                     // ── remove ────────────────────────────────────────────────
                     .then(Commands.literal("remove")
-                        .then(Commands.argument("dimension", StringArgumentType.word())
+                        .then(Commands.argument("dimension", ResourceLocationArgument.id())
                             .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
                                 getManagedDimNames(), builder
                             ))
@@ -88,7 +88,7 @@ public class ACDimenCommands {
 
     private static int executeTp(CommandContext<CommandSourceStack> ctx) {
         CommandSourceStack source = ctx.getSource();
-        String dimArg = StringArgumentType.getString(ctx, "dimension");
+        String dimArg = ResourceLocationArgument.getId(ctx, "dimension").toString();
 
         if (!(source.getEntity() instanceof ServerPlayer player)) {
             source.sendFailure(Component.translatable("message.abysscore.dimen.player_only"));
@@ -187,42 +187,46 @@ public class ACDimenCommands {
 
     private static int executeUnload(CommandContext<CommandSourceStack> ctx) {
         CommandSourceStack source = ctx.getSource();
-        String name = StringArgumentType.getString(ctx, "dimension");
+        String dimArg  = ResourceLocationArgument.getId(ctx, "dimension").toString();
+        String dimName = ResourceLocationArgument.getId(ctx, "dimension").getPath();
 
-        // Never allow unloading vanilla dimensions
-        if (isVanillaDim(name)) {
-            source.sendFailure(Component.translatable("message.abysscore.dimen.cannot_unload_vanilla", name));
+        if (isVanillaDim(dimArg)) {
+            source.sendFailure(Component.translatable("message.abysscore.dimen.cannot_unload_vanilla", dimArg));
             return 0;
         }
 
-        boolean success = ACDimensionManager.unload(name, source.getServer());
-        if (!success) {
-            source.sendFailure(Component.translatable("message.abysscore.dimen.not_found_or_unloaded", name));
-            return 0;
+        // Check if it's an AbyssCore-managed dim
+        if (ACDimensionManager.exists(dimName)) {
+            boolean success = ACDimensionManager.unload(dimName, source.getServer());
+            if (!success) {
+                source.sendFailure(Component.translatable("message.abysscore.dimen.not_found_or_unloaded", dimArg));
+                return 0;
+            }
+            source.sendSuccess(
+                    () -> Component.translatable("message.abysscore.dimen.unloaded_pending", dimArg), true);
+            return 1;
         }
 
-        source.sendSuccess(
-            () -> Component.translatable("message.abysscore.dimen.unloaded_pending", name),
-            true
-        );
-        return 1;
+        source.sendFailure(Component.translatable("message.abysscore.dimen.cannot_unload_external", dimArg));
+        return 0;
     }
 
     // ── /abysscore dimen load <dimension> ────────────────────────────────────
 
     private static int executeLoad(CommandContext<CommandSourceStack> ctx) {
         CommandSourceStack source = ctx.getSource();
-        String name = StringArgumentType.getString(ctx, "dimension");
+        String dimArg  = ResourceLocationArgument.getId(ctx, "dimension").toString();
+        String dimName = ResourceLocationArgument.getId(ctx, "dimension").getPath();
 
-        boolean success = ACDimensionManager.load(name, source.getServer());
+        boolean success = ACDimensionManager.load(dimName, source.getServer());
         if (!success) {
-            source.sendFailure(Component.translatable("message.abysscore.dimen.not_found_or_loaded", name));
+            source.sendFailure(Component.translatable("message.abysscore.dimen.not_found_or_loaded", dimArg));
             return 0;
         }
 
         source.sendSuccess(
-            () -> Component.translatable("message.abysscore.dimen.load_pending", name),
-            true
+                () -> Component.translatable("message.abysscore.dimen.load_pending", dimArg),
+                true
         );
         return 1;
     }
@@ -231,44 +235,42 @@ public class ACDimenCommands {
 
     private static int executeRemove(CommandContext<CommandSourceStack> ctx) {
         CommandSourceStack source = ctx.getSource();
-        String name = StringArgumentType.getString(ctx, "dimension");
+        String dimArg  = ResourceLocationArgument.getId(ctx, "dimension").toString();
+        String dimName = ResourceLocationArgument.getId(ctx, "dimension").getPath();
 
         if (!(source.getEntity() instanceof ServerPlayer player)) {
             source.sendFailure(Component.translatable("message.abysscore.dimen.player_only"));
             return 0;
         }
 
-        if (isVanillaDim(name)) {
-            source.sendFailure(Component.translatable("message.abysscore.dimen.cannot_remove_vanilla", name));
+        if (isVanillaDim(dimArg)) {
+            source.sendFailure(Component.translatable("message.abysscore.dimen.cannot_remove_vanilla", dimArg));
             return 0;
         }
 
-        if (!ACDimensionManager.exists(name)) {
-            source.sendFailure(Component.translatable("message.abysscore.dimen.not_found", name));
+        if (!ACDimensionManager.exists(dimName)) {
+            source.sendFailure(Component.translatable("message.abysscore.dimen.not_found", dimArg));
             return 0;
         }
 
-        // Two-step confirmation
-        if (!ACDimensionManager.hasPendingConfirm(player.getUUID(), name)) {
-            // First invocation — start the 30-second confirmation window
-            ACDimensionManager.startRemoveConfirm(player.getUUID(), name);
+        if (!ACDimensionManager.hasPendingConfirm(player.getUUID(), dimName)) {
+            ACDimensionManager.startRemoveConfirm(player.getUUID(), dimName);
             source.sendSuccess(
-                () -> Component.translatable("message.abysscore.dimen.remove_confirm", name),
-                false
+                    () -> Component.translatable("message.abysscore.dimen.remove_confirm", dimArg),
+                    false
             );
             return 0;
         }
 
-        // Second invocation within 30s — confirmed
-        boolean success = ACDimensionManager.confirmRemove(name, source.getServer());
+        boolean success = ACDimensionManager.confirmRemove(dimName, source.getServer());
         if (!success) {
-            source.sendFailure(Component.translatable("message.abysscore.dimen.remove_failed", name));
+            source.sendFailure(Component.translatable("message.abysscore.dimen.remove_failed", dimArg));
             return 0;
         }
 
         source.sendSuccess(
-            () -> Component.translatable("message.abysscore.dimen.removed_pending", name),
-            true
+                () -> Component.translatable("message.abysscore.dimen.removed_pending", dimArg),
+                true
         );
         return 1;
     }
@@ -301,13 +303,6 @@ public class ACDimenCommands {
             .toList();
     }
 
-    private static List<String> getManagedLoadedDimNames() {
-        return ACDimensionManager.getAll().stream()
-            .filter(d -> d.state == ACDimensionData.State.LOADED)
-            .map(d -> d.name)
-            .toList();
-    }
-
     private static List<String> getManagedUnloadedDimNames() {
         return ACDimensionManager.getAll().stream()
             .filter(d -> d.state == ACDimensionData.State.UNLOADED)
@@ -319,5 +314,16 @@ public class ACDimenCommands {
         return name.equals("overworld") || name.equals("the_nether") || name.equals("the_end")
             || name.equals("minecraft:overworld") || name.equals("minecraft:the_nether")
             || name.equals("minecraft:the_end");
+    }
+
+    private static List<String> getUnloadableDimKeys(MinecraftServer server) {
+        List<String> keys = new java.util.ArrayList<>();
+        server.getAllLevels().forEach(level -> {
+            String key = level.dimension().location().toString();
+            if (!isVanillaDim(key)) {
+                keys.add(key);
+            }
+        });
+        return keys;
     }
 }

@@ -5,8 +5,6 @@ import com.gugas749.abysscore.Client.ClientTickHandler;
 import com.gugas749.abysscore.Client.KeyBindings;
 import com.gugas749.abysscore.Commands.ACModCommands;
 import com.gugas749.abysscore.Features.Dimen.ACDimensionManager;
-import com.gugas749.abysscore.Features.Vanish.ACSimpleVoiceChatIntegration;
-import com.gugas749.abysscore.Features.Vanish.ACVanishListener;
 import com.gugas749.abysscore.Network.PacketHandler;
 import com.gugas749.abysscore.Features.Regions.ACBlockProtectionListener;
 import com.mojang.logging.LogUtils;
@@ -43,13 +41,11 @@ public class Abysscore {
         NeoForge.EVENT_BUS.register(new ACModCommands());
         NeoForge.EVENT_BUS.register(new ACBlockProtectionListener());
         NeoForge.EVENT_BUS.addListener(this::onServerStarting);
-        NeoForge.EVENT_BUS.register(new ACVanishListener());
 
         modEventBus.addListener(this::commonSetup);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        ACSimpleVoiceChatIntegration.init();
         event.enqueueWork(() -> LOGGER.info("[AbyssCore] Successfully loaded!"));
     }
 
