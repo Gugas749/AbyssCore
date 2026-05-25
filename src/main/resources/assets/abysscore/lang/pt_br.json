@@ -16,7 +16,7 @@
   "message.abysscore.protect.region_tag_removed": "§1[AbyssCore] §fA região '%s' não possui mais a tag '%s'.",
   "message.abysscore.protect.region_status_none": "§1[AbyssCore] §fA região '%s' não possui nenhuma tag.",
   "message.abysscore.protect.region_status_active": "§1[AbyssCore] §fA região '%s' possui a tag '%s'.",
-  "message.abysscore.protect.invalid_tag": "§1[AbyssCore] §f'%s' não é uma tag valida. Use: no_build, no_interact, no_fly, no_friendlyfire, no_hunger.",
+  "message.abysscore.protect.invalid_tag": "§1[AbyssCore] §f'%s' não é uma tag valida. Use: no_build, no_interact, no_fly, no_friendlyfire, no_hunger, no_tp.",
 
   "_comment_region_cmd": "--- /abysscore region command ---",
   "message.abysscore.region.already_exists": "§1[AbyssCore] §fA região '%s' já existe.",
@@ -146,5 +146,12 @@
   "message.abysscore.help.tp_hover": "Teleportar até %s e aceitar o pedido",
   "message.abysscore.help.list_empty": "§1[AbyssCore] §fNenhum pedido de ajuda ativo.",
   "message.abysscore.help.list_header": "§1[AbyssCore] §fPedidos de ajuda ativos (%s):",
-  "message.abysscore.help.staff_broadcast": "§1[AbyssCore] §c%s §faceitou o pedido de ajuda de §e%s."
+  "message.abysscore.help.staff_broadcast": "§1[AbyssCore] §c%s §faceitou o pedido de ajuda de §e%s.",
+
+  "_comment_nametag": "--- nametag ---",
+  "message.abysscore.nametag.player_only": "§1[AbyssCore] §fEste comando só pode ser executado por um jogador.",
+  "message.abysscore.nametag.now_hidden": "§1[AbyssCore] §fNomes de jogadores agora estão ocultos para você.",
+  "message.abysscore.nametag.now_visible": "§1[AbyssCore] §fNomes de jogadores agora estão visíveis para você.",
+  "message.abysscore.nametag.status_hidden": "§1[AbyssCore] §fOs nomes de jogadores estão atualmente ocultos para você.",
+  "message.abysscore.nametag.status_visible": "§1[AbyssCore] §fOs nomes de jogadores estão atualmente visíveis para você."
 }

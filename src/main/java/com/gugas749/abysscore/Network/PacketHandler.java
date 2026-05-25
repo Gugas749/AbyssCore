@@ -1,5 +1,6 @@
 package com.gugas749.abysscore.Network;
 
+import com.gugas749.abysscore.Client.ACNametagClientHandler;
 import com.gugas749.abysscore.Network.Binds.KeyPressHandler;
 import com.gugas749.abysscore.Network.Binds.KeyPressPacket;
 import com.gugas749.abysscore.Network.Bulk.OpenBulkScreenPacket;
@@ -7,6 +8,7 @@ import com.gugas749.abysscore.Network.Bulk.SubmitBulkCommandHandler;
 import com.gugas749.abysscore.Network.Bulk.SubmitBulkCommandPacket;
 import com.gugas749.abysscore.Network.Figura.FiguraReloadPacket;
 import com.gugas749.abysscore.Network.Figura.FiguraReloadPacketHandler;
+import com.gugas749.abysscore.Network.Nametag.NametagSyncPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.api.distmarker.Dist;
@@ -52,6 +54,15 @@ public class PacketHandler {
                 OpenDimenCreateScreenPacket.CODEC,
                 FMLEnvironment.dist == Dist.CLIENT
                         ? PacketHandler::handleOpenDimenCreateClient
+                        : (pkt, ctx) -> {}
+        );
+
+        // NAMETAGS
+        registrar.playToClient(
+                NametagSyncPacket.TYPE,
+                NametagSyncPacket.CODEC,
+                FMLEnvironment.dist == Dist.CLIENT
+                        ? ACNametagClientHandler::handleSync
                         : (pkt, ctx) -> {}
         );
 

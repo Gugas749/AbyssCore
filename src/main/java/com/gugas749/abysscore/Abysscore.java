@@ -1,5 +1,6 @@
 package com.gugas749.abysscore;
 
+import com.gugas749.abysscore.Client.ACNametagClientHandler;
 import com.gugas749.abysscore.Features.Bulk.BulkCommandManager;
 import com.gugas749.abysscore.Client.ClientTickHandler;
 import com.gugas749.abysscore.Client.KeyBindings;
@@ -33,6 +34,7 @@ public class Abysscore {
 
         // ── Client only ──────────────────────────────────────────────────────
         if (FMLEnvironment.dist == Dist.CLIENT) {
+            NeoForge.EVENT_BUS.register(new ACNametagClientHandler());
             modEventBus.addListener(KeyBindings::register);
             NeoForge.EVENT_BUS.register(new ClientTickHandler());
         }

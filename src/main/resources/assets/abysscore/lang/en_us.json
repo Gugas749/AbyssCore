@@ -9,7 +9,7 @@
   "message.abysscore.no_tp_blocked": "§9A strange power prevents you from teleporting here.",
 
   "_comment_protect_cmd": "--- /abysscore protect command ---",
-  "message.abysscore.protect.invalid_tag": "§1[AbyssCore] §f'%s' is not a valid tag. Use: no_build, no_interact, no_fly, no_friendlyfire, no_hunger.",
+  "message.abysscore.protect.invalid_tag": "§1[AbyssCore] §f'%s' is not a valid tag. Use: no_build, no_interact, no_fly, no_friendlyfire, no_hunger, no_tp.",
   "message.abysscore.protect.region_not_found": "§1[AbyssCore] §fRegion '%s' does not exist.",
   "message.abysscore.protect.region_already_has_tag": "§1[AbyssCore] §fRegion '%s' already has the tag '%s'.",
   "message.abysscore.protect.region_tag_added": "§1[AbyssCore] §fRegion '%s' now has the tag '%s'.",
@@ -146,5 +146,12 @@
   "message.abysscore.help.tp_hover":           "Teleport to %s and accept their request",
   "message.abysscore.help.list_empty":         "§1[AbyssCore] §fNo active help requests.",
   "message.abysscore.help.list_header":        "§1[AbyssCore] §fActive help requests (%s):",
-  "message.abysscore.help.staff_broadcast":    "§1[AbyssCore] §c%s §faccepted the help request from §e%s."
+  "message.abysscore.help.staff_broadcast":    "§1[AbyssCore] §c%s §faccepted the help request from §e%s.",
+
+  "_comment_nametag": "--- nametag ---",
+  "message.abysscore.nametag.player_only":    "§1[AbyssCore] §fThis command can only be run by a player.",
+  "message.abysscore.nametag.now_hidden":     "§1[AbyssCore] §fNametags are now hidden for you.",
+  "message.abysscore.nametag.now_visible":    "§1[AbyssCore] §fNametags are now visible for you.",
+  "message.abysscore.nametag.status_hidden":  "§1[AbyssCore] §fYour nametags are currently hidden.",
+  "message.abysscore.nametag.status_visible": "§1[AbyssCore] §fYour nametags are currently visible."
 }
