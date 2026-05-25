@@ -6,17 +6,26 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * Server → Client: tells the client whether they should see nametags.
- * Sent on login and whenever the OP toggles.
- */
-public record NametagSyncPacket(boolean canSeeNametags) implements CustomPacketPayload {
+public record NametagSyncPacket(
+    boolean canSeeNametags,
+    boolean hideAllTags
+) implements CustomPacketPayload {
+
+    public NametagSyncPacket(boolean canSeeNametags) {
+        this(canSeeNametags, false);
+    }
 
     public static final Type<NametagSyncPacket> TYPE =
         new Type<>(ResourceLocation.fromNamespaceAndPath("abysscore", "nametag_sync"));
 
     public static final StreamCodec<ByteBuf, NametagSyncPacket> CODEC =
-        ByteBufCodecs.BOOL.map(NametagSyncPacket::new, NametagSyncPacket::canSeeNametags);
+        StreamCodec.of(
+            (buf, pkt) -> {
+                buf.writeBoolean(pkt.canSeeNametags());
+                buf.writeBoolean(pkt.hideAllTags());
+            },
+            buf -> new NametagSyncPacket(buf.readBoolean(), buf.readBoolean())
+        );
 
     @Override
     public Type<? extends CustomPacketPayload> type() { return TYPE; }

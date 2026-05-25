@@ -25,7 +25,9 @@ public class ACTagFlagCommands {
             ACBlockProtectionListener.NO_FLY_TAG,
             ACBlockProtectionListener.NO_FRIENDLYFIRE_TAG,
             ACBlockProtectionListener.NO_HUNGER_TAG,
-            ACBlockProtectionListener.NO_TP_TAG
+            ACBlockProtectionListener.NO_TP_TAG,
+            ACBlockProtectionListener.NO_MOBSPAWNING_HOSTILE_TAG,
+            ACBlockProtectionListener.NO_MOBSPAWNING_PACIFIC_TAG
     );
 
     // Tab-complete region names from the current level's saved data

@@ -99,10 +99,6 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 
 dependencies {
-    //compileOnly "curse.maven:figura-901503:6204484"
-    compileOnly "curse.maven:worldedit-225608:5830452"
-    compileOnly "curse.maven:create-328085:7178761"
-
     compileOnly "curse.maven:curios-309927:6529130"
     runtimeOnly "curse.maven:curios-309927:6529130"
 
@@ -110,11 +106,7 @@ dependencies {
 
     compileOnly "curse.maven:cosmetic-armor-reworked-237307:5610814"
 
-    compileOnly "curse.maven:simple-voice-chat-416089:8037683"
-
-    compileOnly "curse.maven:oritech-1030830:8054306"
-
-    compileOnly "curse.maven:oritech-things-1166849:8058690"
+    compileOnly "curse.maven:worldedit-225608:5830452"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

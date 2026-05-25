@@ -9,7 +9,7 @@
   "message.abysscore.no_tp_blocked": "§9A strange power prevents you from teleporting here.",
 
   "_comment_protect_cmd": "--- /abysscore protect command ---",
-  "message.abysscore.protect.invalid_tag": "§1[AbyssCore] §f'%s' is not a valid tag. Use: no_build, no_interact, no_fly, no_friendlyfire, no_hunger, no_tp.",
+  "message.abysscore.protect.invalid_tag": "§1[AbyssCore] §f'%s' is not a valid tag. Use: no_build, no_interact, no_fly, no_friendlyfire, no_hunger, no_tp, no_mobspawning_hostile, no_mobspawning_pacific.",
   "message.abysscore.protect.region_not_found": "§1[AbyssCore] §fRegion '%s' does not exist.",
   "message.abysscore.protect.region_already_has_tag": "§1[AbyssCore] §fRegion '%s' already has the tag '%s'.",
   "message.abysscore.protect.region_tag_added": "§1[AbyssCore] §fRegion '%s' now has the tag '%s'.",
@@ -27,9 +27,11 @@
   "message.abysscore.region.list_header": "§1[AbyssCore] §fRegions (%s):",
   "message.abysscore.region.list_entry": "- %s [%s] %s %s %s -> %s %s %s",
   "message.abysscore.region.player_required": "§1[AbyssCore] §fOnly players can create a region from a WorldEdit selection.",
-  "message.abysscore.region.worldedit_missing": "§1[AbyssCore] §fWorldEdit is not installed. Use /abysscore region add <name> <from> <to> instead.",
+  "message.abysscore.region.worldedit_missing": "§1[AbyssCore] §fWorldEdit is not installed. Use /§1abysscore region add <name> <from> <to> §finstead.",
   "message.abysscore.region.worldedit_incomplete": "§1[AbyssCore] §fYour WorldEdit selection is incomplete.",
   "message.abysscore.region.worldedit_error": "§1[AbyssCore] §fCould not read your WorldEdit selection.",
+  "message.abysscore.region.tp": "§1[AbyssCore] §fTeleported to region §1'%s'.",
+  "message.abysscore.region.dimension_not_loaded": "§1[AbyssCore] §fThe dimension §1'%s' §fis not currently loaded.",
 
   "_comment_figura": "--- /abysscore figura reloadall ---",
   "message.abysscore.figura.no_players": "§1[AbyssCore] §fNo players online.",
@@ -153,5 +155,20 @@
   "message.abysscore.nametag.now_hidden":     "§1[AbyssCore] §fNametags are now hidden for you.",
   "message.abysscore.nametag.now_visible":    "§1[AbyssCore] §fNametags are now visible for you.",
   "message.abysscore.nametag.status_hidden":  "§1[AbyssCore] §fYour nametags are currently hidden.",
-  "message.abysscore.nametag.status_visible": "§1[AbyssCore] §fYour nametags are currently visible."
+  "message.abysscore.nametag.status_visible": "§1[AbyssCore] §fYour nametags are currently visible.",
+
+
+
+
+  "message.abysscore.status.player_only":  "[AbyssCore] This command can only be used by a player.",
+  "message.abysscore.status.invalid":      "[AbyssCore] Invalid status. Use: on, off, afk, or clear.",
+  "message.abysscore.status.set":          "[AbyssCore] Your status is now: %s.",
+  "message.abysscore.status.cleared":      "[AbyssCore] Your status tag has been removed.",
+  "message.abysscore.status.current":      "[AbyssCore] Your current status: %s.",
+  "message.abysscore.status.current_none": "[AbyssCore] You have no status set.",
+  "message.abysscore.status.hide_enabled":    "[AbyssCore] Status tags are now hidden for you.",
+  "message.abysscore.status.hide_disabled":   "[AbyssCore] Status tags are now visible for you.",
+  "message.abysscore.status.hiding_note":     "[AbyssCore] Note: You have status tags hidden.",
+  "message.abysscore.status.hideall_enabled": "[AbyssCore] Status tags hidden for all non-OP players.",
+  "message.abysscore.status.hideall_disabled":"[AbyssCore] Status tags are now visible for all non-OP players."
 }

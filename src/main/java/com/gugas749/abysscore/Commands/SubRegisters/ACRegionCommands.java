@@ -9,6 +9,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -41,6 +42,16 @@ public class ACRegionCommands {
                                                                 .executes(ACRegionCommands::executeAddFromCorners)
                                                         )
                                                 )
+                                        )
+                                )
+                                .then(Commands.literal("tp")
+                                        .then(Commands.argument("name", StringArgumentType.word())
+                                                .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
+                                                        ACRegionSavedData.get(ctx.getSource().getLevel())
+                                                                .regions().stream().map(ACRegion::name).toList(),
+                                                        builder
+                                                ))
+                                                .executes(ACRegionCommands::executeTp)
                                         )
                                 )
                         )
@@ -163,6 +174,59 @@ public class ACRegionCommands {
                 true
         );
 
+        return 1;
+    }
+
+    // ── tp ────────────────────────────────────────────────────────────────────
+
+    private static int executeTp(CommandContext<CommandSourceStack> ctx) {
+        CommandSourceStack source = ctx.getSource();
+        String name = StringArgumentType.getString(ctx, "name");
+
+        if (!(source.getEntity() instanceof ServerPlayer player)) {
+            source.sendFailure(Component.translatable("message.abysscore.region.player_required"));
+            return 0;
+        }
+
+        ACRegionSavedData data = ACRegionSavedData.get(source.getLevel());
+        Optional<ACRegion> regionOpt = data.getRegion(name);
+
+        if (regionOpt.isEmpty()) {
+            source.sendFailure(Component.translatable("message.abysscore.region.not_found", name));
+            return 0;
+        }
+
+        ACRegion region = regionOpt.get();
+
+        // Find the server level for the region's dimension
+        ServerLevel targetLevel = null;
+        for (ServerLevel level : source.getServer().getAllLevels()) {
+            if (level.dimension().location().toString().equals(region.dimension())) {
+                targetLevel = level;
+                break;
+            }
+        }
+
+        if (targetLevel == null) {
+            source.sendFailure(Component.translatable("message.abysscore.region.dimension_not_loaded", region.dimension()));
+            return 0;
+        }
+
+        // Teleport to the center of the region at the min Y + 1 (safe standing position)
+        double centerX = (region.minX() + region.maxX()) / 2.0 + 0.5;
+        double centerZ = (region.minZ() + region.maxZ()) / 2.0 + 0.5;
+        double centerY = region.minY() + 1;
+
+        player.teleportTo(
+                targetLevel,
+                centerX, centerY, centerZ,
+                player.getYRot(), player.getXRot()
+        );
+
+        source.sendSuccess(
+                () -> Component.translatable("message.abysscore.region.tp", name),
+                false
+        );
         return 1;
     }
 }

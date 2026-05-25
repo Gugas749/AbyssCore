@@ -18,7 +18,9 @@ public class ACModCommands {
         ACBindCommands.register(event.getDispatcher());
         //ACStaffCommands.register(event.getDispatcher());
         ACDimenCommands.register(event.getDispatcher());
+        ACDimenSettingsCommands.register(event.getDispatcher());
         ACHelpCommands.register(event.getDispatcher());
         ACNametagCommands.register(event.getDispatcher());
+        ACStatusCommands.register(event.getDispatcher());
     }
 }
