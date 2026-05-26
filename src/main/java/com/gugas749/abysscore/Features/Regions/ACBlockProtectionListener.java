@@ -199,6 +199,34 @@ public class ACBlockProtectionListener {
         }
     }
 
+    // ── no_tp — block Waystones Warp Stone item use ───────────────────────────
+
+    private static final java.util.Set<String> WAYSTONE_ITEM_IDS = java.util.Set.of(
+            "waystones:warp_stone",
+            "waystones:warp_scroll",
+            "waystones:return_scroll",
+            "waystones:bound_scroll",
+            "waystones:attuned_shard"
+    );
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (isExempt(player)) return;
+
+        String itemId = BuiltInRegistries.ITEM
+                .getKey(event.getItemStack().getItem()).toString();
+
+        if (!WAYSTONE_ITEM_IDS.contains(itemId)) return;
+
+        // Block use if the player is in a no_tp region
+        BlockPos pos = player.blockPosition();
+        if (isRestrictedAt(player, pos, NO_TP_TAG)) {
+            event.setCanceled(true);
+            notify(player, "message.abysscore.no_tp_blocked");
+        }
+    }
+
     // ── no_mobspawning_hostile ────────────────────────────────────────────────
 
     @SubscribeEvent(priority = EventPriority.HIGH)

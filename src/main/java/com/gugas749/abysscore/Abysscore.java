@@ -1,15 +1,15 @@
 package com.gugas749.abysscore;
 
-import com.gugas749.abysscore.Client.ACNametagClientHandler;
 import com.gugas749.abysscore.Features.Bulk.BulkCommandManager;
 import com.gugas749.abysscore.Client.ClientTickHandler;
 import com.gugas749.abysscore.Client.KeyBindings;
 import com.gugas749.abysscore.Commands.ACModCommands;
 import com.gugas749.abysscore.Features.Dimen.ACDimensionManager;
-import com.gugas749.abysscore.Features.Nametag.ACNametagManager;
-import com.gugas749.abysscore.Features.Status.ACStatusManager;
+import com.gugas749.abysscore.Features.Vanish.ACVanishExtras;
 import com.gugas749.abysscore.Network.PacketHandler;
 import com.gugas749.abysscore.Features.Regions.ACBlockProtectionListener;
+import com.gugas749.abysscore.Client.ACVanishHudHandler;
+import com.gugas749.abysscore.Features.Vanish.ACVanishStateListener;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -39,16 +39,18 @@ public class Abysscore {
 
         // ── Client only ──────────────────────────────────────────────────────
         if (FMLEnvironment.dist == Dist.CLIENT) {
-            NeoForge.EVENT_BUS.register(new ACNametagClientHandler());
             modEventBus.addListener(KeyBindings::register);
             NeoForge.EVENT_BUS.register(new ClientTickHandler());
+            NeoForge.EVENT_BUS.register(new ACVanishHudHandler());
         }
 
         // ── Server ───────────────────────────────────────────────────────────
         NeoForge.EVENT_BUS.register(new ACModCommands());
         NeoForge.EVENT_BUS.register(new ACBlockProtectionListener());
+        NeoForge.EVENT_BUS.register(new ACVanishStateListener());
         NeoForge.EVENT_BUS.addListener(this::onServerStarting);
         NeoForge.EVENT_BUS.addListener(this::onPlayerLogin);
+        NeoForge.EVENT_BUS.addListener(this::onPlayerLeave);
 
         modEventBus.addListener(this::commonSetup);
     }
@@ -65,7 +67,6 @@ public class Abysscore {
         BulkCommandManager.load();
         ACDimensionManager.load();   // load registry
         ACDimensionManager.onServerStarted(event.getServer());  // cleanup pending states
-        ACStatusManager.load();
         LOGGER.info("[AbyssCore] Server started, bulk commands loaded.");
         LOGGER.info("[AbyssCore] Server started, Dimens registry loaded.");
     }
@@ -73,7 +74,11 @@ public class Abysscore {
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
-        ACStatusManager.onPlayerJoin(player);
-        ACNametagManager.syncNametag(player);
+    }
+
+    @SubscribeEvent
+    public void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        ACVanishExtras.onPlayerLeave(player.getUUID());
     }
 }

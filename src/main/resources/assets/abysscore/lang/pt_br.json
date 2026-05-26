@@ -157,20 +157,30 @@
   "message.abysscore.nametag.status_hidden": "§1[AbyssCore] §fOs nomes de jogadores estão atualmente ocultos para você.",
   "message.abysscore.nametag.status_visible": "§1[AbyssCore] §fOs nomes de jogadores estão atualmente visíveis para você.",
 
+  "_comment_status": "--- STATUS ---",
+  "message.abysscore.status.player_only":     "§1[AbyssCore] §fEste comando só pode ser usado por um jogador.",
+  "message.abysscore.status.invalid":         "§1[AbyssCore] §fStatus inválido. Use: on, off, afk, ou clear.",
+  "message.abysscore.status.set":             "§1[AbyssCore] §fSeu status agora é: %s.",
+  "message.abysscore.status.cleared":         "§1[AbyssCore] §fSua tag de status foi removida.",
+  "message.abysscore.status.current":         "§1[AbyssCore] §fSeu status atual: %s.",
+  "message.abysscore.status.current_none":    "§1[AbyssCore] §fVocê não tem um status definido.",
+  "message.abysscore.status.hide_enabled":    "§1[AbyssCore] §fTags de status agora estão ocultas para você.",
+  "message.abysscore.status.hide_disabled":   "§1[AbyssCore] §fTags de status agora estão visíveis para você.",
+  "message.abysscore.status.hiding_note":     "§1[AbyssCore] §fNota: Você está ocultando as tags de status.",
+  "message.abysscore.status.hideall_enabled": "§1[AbyssCore] §fTags de status ocultadas para todos os jogadores não-OP.",
+  "message.abysscore.status.hideall_disabled":"§1[AbyssCore] §fTags de status agora visíveis para todos os jogadores não-OP.",
 
-
-
-
-
-  "message.abysscore.status.player_only":  "[AbyssCore] Este comando só pode ser usado por um jogador.",
-  "message.abysscore.status.invalid":      "[AbyssCore] Status inválido. Use: on, off, afk, ou clear.",
-  "message.abysscore.status.set":          "[AbyssCore] Seu status agora é: %s.",
-  "message.abysscore.status.cleared":      "[AbyssCore] Sua tag de status foi removida.",
-  "message.abysscore.status.current":      "[AbyssCore] Seu status atual: %s.",
-  "message.abysscore.status.current_none": "[AbyssCore] Você não tem um status definido.",
-  "message.abysscore.status.hide_enabled":    "[AbyssCore] Tags de status agora estão ocultas para você.",
-  "message.abysscore.status.hide_disabled":   "[AbyssCore] Tags de status agora estão visíveis para você.",
-  "message.abysscore.status.hiding_note":     "[AbyssCore] Nota: Você está ocultando as tags de status.",
-  "message.abysscore.status.hideall_enabled": "[AbyssCore] Tags de status ocultadas para todos os jogadores não-OP.",
-  "message.abysscore.status.hideall_disabled":"[AbyssCore] Tags de status agora visíveis para todos os jogadores não-OP."
+  "_comment_vanish": "--- VANISH ---",
+  "message.abysscore.vanish.player_only":        "§1[AbyssCore] §fEste comando só pode ser usado por um jogador.",
+  "message.abysscore.vanish.player_not_found":   "§1[AbyssCore] §fJogador não encontrado.",
+  "message.abysscore.vanish.cannot_target_self": "§1[AbyssCore] §fVocê não pode se selecionar.",
+  "message.abysscore.vanish.team_visible":       "§1[AbyssCore] §fVisibilidade de equipe: ATIVADA — membros da equipe podem ver jogadores invisíveis.",
+  "message.abysscore.vanish.team_hidden":        "§1[AbyssCore] §fVisibilidade de equipe: DESATIVADA — membros da equipe não podem ver jogadores invisíveis.",
+  "message.abysscore.vanish.team_status_on":     "§1[AbyssCore] §fVisibilidade de equipe está atualmente ATIVADA.",
+  "message.abysscore.vanish.team_status_off":    "§1[AbyssCore] §fVisibilidade de equipe está atualmente DESATIVADA.",
+  "message.abysscore.vanish.shown_to":           "§1[AbyssCore] §fVocê agora está visível para %s.",
+  "message.abysscore.vanish.hidden_from":        "§1[AbyssCore] §fVocê agora está oculto de %s.",
+  "message.abysscore.vanish.exceptions_cleared": "§1[AbyssCore] §fTodas as exceções de visibilidade foram limpas.",
+  "message.abysscore.vanish.no_exceptions":      "§1[AbyssCore] §fNenhuma exceção de visibilidade definida.",
+  "message.abysscore.vanish.hud_warning": "Você está atualmente invisível"
 }

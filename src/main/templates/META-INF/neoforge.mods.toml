@@ -2,7 +2,9 @@ modLoader = "javafml" #mandatory
 loaderVersion = "${loader_version_range}" #mandatory
 issueTrackerURL = "https://github.com/Gugas749/AbyssCore/issues"
 license = "${mod_license}"
-mixinConfigs = "abysscore.mixins.json"
+
+[[mixins]]
+config = "abysscore.mixins.json"
 
 [[mods]] #mandatory
 modId = "${mod_id}" #mandatory

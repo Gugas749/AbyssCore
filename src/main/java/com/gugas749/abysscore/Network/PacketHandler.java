@@ -1,14 +1,12 @@
 package com.gugas749.abysscore.Network;
 
-import com.gugas749.abysscore.Client.ACNametagClientHandler;
 import com.gugas749.abysscore.Network.Binds.KeyPressHandler;
 import com.gugas749.abysscore.Network.Binds.KeyPressPacket;
 import com.gugas749.abysscore.Network.Bulk.OpenBulkScreenPacket;
 import com.gugas749.abysscore.Network.Bulk.SubmitBulkCommandHandler;
 import com.gugas749.abysscore.Network.Bulk.SubmitBulkCommandPacket;
-import com.gugas749.abysscore.Network.Figura.FiguraReloadPacket;
-import com.gugas749.abysscore.Network.Figura.FiguraReloadPacketHandler;
-import com.gugas749.abysscore.Network.Nametag.NametagSyncPacket;
+import com.gugas749.abysscore.Client.ACVanishHudHandler;
+import com.gugas749.abysscore.Network.Vanish.VanishStateSyncPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.api.distmarker.Dist;
@@ -30,15 +28,6 @@ public class PacketHandler {
 
         // ── S2C (server → client) ────────────────────────────────────────────
 
-        // FiguraReload: optional because Figura is client-only
-        optional.playToClient(
-                FiguraReloadPacket.TYPE,
-                FiguraReloadPacket.CODEC,
-                FMLEnvironment.dist == Dist.CLIENT
-                        ? FiguraReloadPacketHandler::handle
-                        : (pkt, ctx) -> {}
-        );
-
         // OpenBulkScreen: dist-safe handler — only opens screen on client dist
         registrar.playToClient(
                 OpenBulkScreenPacket.TYPE,
@@ -57,12 +46,12 @@ public class PacketHandler {
                         : (pkt, ctx) -> {}
         );
 
-        // NAMETAGS
+        // VANISH
         registrar.playToClient(
-                NametagSyncPacket.TYPE,
-                NametagSyncPacket.CODEC,
+                VanishStateSyncPacket.TYPE,
+                VanishStateSyncPacket.CODEC,
                 FMLEnvironment.dist == Dist.CLIENT
-                        ? ACNametagClientHandler::handleSync
+                        ? ACVanishHudHandler::handleSync
                         : (pkt, ctx) -> {}
         );
 
