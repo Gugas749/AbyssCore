@@ -49,3 +49,17 @@ type = "optional" #soft dependency
 versionRange = "*"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies."${mod_id}"]]
+modId="launcherguard"
+type="required"
+versionRange="[0.0.1,)"
+ordering="NONE"
+side="SERVER"
+
+[[dependencies."${mod_id}"]]
+modId="launcherguard_client"
+type="required"
+versionRange="[0.0.1,)"
+ordering="NONE"
+side="CLIENT"

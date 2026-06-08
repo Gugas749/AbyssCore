@@ -142,7 +142,7 @@ public class ACDimenSettingsCommands {
             public void visitBoolean(GameRules.Key<GameRules.BooleanValue> key,
                                      GameRules.Type<GameRules.BooleanValue> type) {
                 if (key.getId().equals(ruleName)) {
-                    level.getGameRules().getRule(key).set(value, source.getServer());
+                    level.getGameRules().getRule(key).set(value, null);
                     found[0] = true;
                     source.sendSuccess(
                             () -> Component.literal(
@@ -187,7 +187,7 @@ public class ACDimenSettingsCommands {
             public void visitInteger(GameRules.Key<GameRules.IntegerValue> key,
                                      GameRules.Type<GameRules.IntegerValue> type) {
                 if (key.getId().equals(ruleName)) {
-                    level.getGameRules().getRule(key).set(value, source.getServer());
+                    level.getGameRules().getRule(key).set(value, null);
                     found[0] = true;
                     source.sendSuccess(
                             () -> Component.literal(

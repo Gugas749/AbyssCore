@@ -1,5 +1,6 @@
 package com.gugas749.abysscore.Features.Vanish;
 
+import com.gugas749.abysscore.Abysscore;
 import com.gugas749.abysscore.Network.Vanish.VanishStateSyncPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -7,18 +8,20 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class ACVanishStateListener {
 
     private static final Map<UUID, Boolean> lastKnownState = new HashMap<>();
 
+    // Cached reflection references — resolved once on first use
+    private static Field vanishedPlayersField = null;
+    private static boolean reflectionFailed = false;
+
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
-        // Send initial state
         boolean vanished = isVanished(player);
         lastKnownState.put(player.getUUID(), vanished);
         PacketDistributor.sendToPlayer(player, new VanishStateSyncPacket(vanished));
@@ -34,8 +37,6 @@ public class ACVanishStateListener {
     public void onPlayerTick(PlayerTickEvent.Post event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         if (player.level().isClientSide()) return;
-
-        // Only check every 20 ticks (1 second) to avoid overhead
         if (player.tickCount % 20 != 0) return;
 
         boolean currentlyVanished = isVanished(player);
@@ -47,12 +48,22 @@ public class ACVanishStateListener {
         }
     }
 
-    private static boolean isVanished(ServerPlayer player) {
+    @SuppressWarnings("unchecked")
+    public static boolean isVanished(ServerPlayer player) {
+        if (reflectionFailed) return false;
+
         try {
-            Class<?> utils = Class.forName("RedstoneDubstep.Vanishmod.VanishUtils");
-            java.lang.reflect.Method m = utils.getMethod("isVanished", ServerPlayer.class);
-            return (boolean) m.invoke(null, player);
+            if (vanishedPlayersField == null) {
+                Class<?> vanishUtil = Class.forName("redstonedubstep.mods.vanishmod.VanishUtil");
+                vanishedPlayersField = vanishUtil.getDeclaredField("VANISHED_PLAYERS");
+                vanishedPlayersField.setAccessible(true);
+                Abysscore.LOGGER.info("[AbyssCore] VanishUtil.VANISHED_PLAYERS field resolved.");
+            }
+            Set<UUID> vanished = (Set<UUID>) vanishedPlayersField.get(null);
+            return vanished != null && vanished.contains(player.getUUID());
         } catch (Exception e) {
+            reflectionFailed = true;
+            Abysscore.LOGGER.warn("[AbyssCore] Could not access VanishUtil.VANISHED_PLAYERS: {}. HUD warning disabled.", e.getMessage());
             return false;
         }
     }
