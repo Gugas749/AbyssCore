@@ -1,5 +1,6 @@
 package com.gugas749.abysscore;
 
+import com.gugas749.abysscore.Commands.SubRegisters.ACGodCommands;
 import com.gugas749.abysscore.Features.Bulk.BulkCommandManager;
 import com.gugas749.abysscore.Client.ClientTickHandler;
 import com.gugas749.abysscore.Client.KeyBindings;
@@ -46,6 +47,7 @@ public class Abysscore {
 
         // ── Server ───────────────────────────────────────────────────────────
         NeoForge.EVENT_BUS.register(new ACModCommands());
+        NeoForge.EVENT_BUS.register(new ACGodCommands());
         NeoForge.EVENT_BUS.register(new ACBlockProtectionListener());
         NeoForge.EVENT_BUS.register(new ACVanishStateListener());
         NeoForge.EVENT_BUS.addListener(this::onServerStarting);
@@ -80,5 +82,6 @@ public class Abysscore {
     public void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         ACVanishExtras.onPlayerLeave(player.getUUID());
+        ACGodCommands.onPlayerLeave(player.getUUID());
     }
 }

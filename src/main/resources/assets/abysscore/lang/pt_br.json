@@ -182,5 +182,13 @@
   "message.abysscore.vanish.hidden_from":        "§1[AbyssCore] §fVocê agora está oculto de %s.",
   "message.abysscore.vanish.exceptions_cleared": "§1[AbyssCore] §fTodas as exceções de visibilidade foram limpas.",
   "message.abysscore.vanish.no_exceptions":      "§1[AbyssCore] §fNenhuma exceção de visibilidade definida.",
-  "message.abysscore.vanish.hud_warning": "Você está atualmente invisível"
+  "message.abysscore.vanish.hud_warning":        "Você está atualmente invisível",
+
+  "_comment_god": "--- GOD ---",
+  "message.abysscore.god.player_only":      "§1[AbyssCore] §fEste comando só pode ser usado por um jogador.",
+  "message.abysscore.god.player_not_found": "§1[AbyssCore] §fJogador não encontrado.",
+  "message.abysscore.god.enabled":          "§1[AbyssCore] §fGod mode abilitado para §2%s.",
+  "message.abysscore.god.disabled":         "§1[AbyssCore] §fGod mode desabilitado para §2%s.",
+  "message.abysscore.god.enabled_self":     "§1[AbyssCore] §fGod mode desabilitado.",
+  "message.abysscore.god.disabled_self":    "§1[AbyssCore] §fGod mode abilitado."
 }

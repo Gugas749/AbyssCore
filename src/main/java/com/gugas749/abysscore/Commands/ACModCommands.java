@@ -20,5 +20,6 @@ public class ACModCommands {
         ACDimenSettingsCommands.register(event.getDispatcher());
         ACHelpCommands.register(event.getDispatcher());
         ACVanishCommands.register(event.getDispatcher());
+        ACGodCommands.register(event.getDispatcher());
     }
 }
