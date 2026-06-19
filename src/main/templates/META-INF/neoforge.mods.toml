@@ -1,0 +1,61 @@
+modLoader = "javafml" #mandatory
+loaderVersion = "${loader_version_range}" #mandatory
+issueTrackerURL = "https://github.com/Gugas749/AbyssCore/issues"
+license = "${mod_license}"
+
+[[mixins]]
+config = "abysscore.mixins.json"
+
+[[mods]] #mandatory
+modId = "${mod_id}" #mandatory
+version = "${mod_version}" #mandatory
+displayName = "${mod_name}" #mandatory
+authors = "${mod_authors}" #optional
+description = '''${mod_description}'''
+
+[[dependencies."${mod_id}"]] #optional
+modId = "neoforge" #mandatory
+type = "required" #mandatory
+versionRange = "${neo_version_range}" #mandatory
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies."${mod_id}"]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft_version_range}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies."${mod_id}"]]
+modId = "worldedit"
+type = "optional"
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies."${mod_id}"]]
+modId = "simple_voice_chat"
+type = "optional" #soft dependency
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"
+
+
+#-------------
+#-------------
+#-------------
+
+[[dependencies."${mod_id}"]]
+modId="launcherguard"
+type="required"
+versionRange="[0.0.1,)"
+ordering="NONE"
+side="SERVER"
+
+[[dependencies."${mod_id}"]]
+modId="launcherguard_client"
+type="required"
+versionRange="[0.0.1,)"
+ordering="NONE"
+side="CLIENT"

@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "refmap": "abysscore.refmap.json",
+  "package": "com.gugas749.abysscore.Mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": [
+    "VanishUtilsMixin"
+  ],
+  "server": [],
+  "minVersion": "0.8"
+}
